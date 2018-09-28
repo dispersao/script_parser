@@ -1,0 +1,23 @@
+{
+  "name": "fountain-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fountain-js": "0.0.1",
+    "mssql": "^4.2.1"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "coffe-script": "0.0.1-security",
+    "mysql": "^2.16.0"
+  }
+}
