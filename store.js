@@ -1,45 +1,59 @@
 
-  const mysql = require('mysql');
   const dbconfig = require('./dbconfig');
+  const Sequelize = require('sequelize');
+  let TABLES = [];
+
   //ALTER TABLE users ADD CONSTRAINT fk_grade_id FOREIGN KEY (grade_id) REFERENCES grades(id);
 
   class DB {
+
     constructor( config ) {
-        this.connection = mysql.createConnection(dbconfig.localhost);
+      const db = dbconfig.localhost;
+        // this.connection = mysql.createConnection(dbconfig.localhost);
+        this.sequelize = new Sequelize(db.database, db.user, db.password, {
+        host: db.server,
+        dialect: 'mysql',
+        pool: {
+          max: 5,
+          min: 0,
+          acquire: 30000,
+          idle: 10000
+        }
+      });
     }
-    query( sql, args ) {
-        return new Promise( ( resolve, reject ) => {
-            this.connection.query( sql, args, ( err, rows ) => {
-                if ( err )
-                    return reject( err );
-                resolve( rows );
-            } );
-        } );
-    }
-    close() {
-        return new Promise( ( resolve, reject ) => {
-            this.connection.end( err => {
-                if ( err )
-                    return reject( err );
-                resolve();
-            } );
-        } );
-    }
+
     createTables(film){
       const tables = ['characters', 'locations', 'types'];
       tables.forEach((tableName) => this.createAndPopulateSimpleTables(tableName, film[tableName]));
       // this.createScenesTables(film.scenes);
     }
     createAndPopulateSimpleTables(name, values){
-      const db = this;
-
-      this.query(this.getQuery('deleteTable', name))
-      .then( data => db.query(db.getQuery('createTable', name)))
-      .then( data => {
-        return db.insertValues(name, values);
+      this.sequelize
+      .authenticate()
+      .then(() => {
+        return this.sequelize.define(name, {
+          content: {
+            type: Sequelize.STRING,
+            allowNull: false
+          }
+        });
       })
-      .then(rows => console.log(name, rows), err => console.log(name, err));
+      .then(table => {
+        TABLES.push(table);
+        return table.sync({force: true});
+      })
+      .then(table => {
+        return values
+        .map(val => {
+          return {content: val};
+        })
+        .map(obVal=> table.create(obVal))
+      })
+      .catch(err => {
+        console.error('error:', err);
+      });
     }
+
     insertValues(tableName, values){
       const db = this;
       const promises = values.map(val => {
