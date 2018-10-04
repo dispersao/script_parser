@@ -15,7 +15,7 @@ Get a .fountain file in the root level
 
 Create a ```dbconfig.js``` file on root leve  that exports a module with the db config for connection.
 
-Run 
+Run
 ```
-node index.js
+node index.js [ FOUNTAIN_FILE_NAME ]
 ```
