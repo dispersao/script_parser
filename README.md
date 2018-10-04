@@ -13,7 +13,7 @@ Download the [fountain.js](https://github.com/pushchris/fountain) repo and unzip
 
 Get a .fountain file in the root level
 
-Create a ```dbconfig.js``` file on root leve  that exports a module with the db config for connection.
+Create a ```dbconfig.js``` file on root level that exports a module with the db config for connection.
 
 Run
 ```
