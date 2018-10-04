@@ -1,117 +1,88 @@
 
-  const mysql = require('mysql');
   const dbconfig = require('./dbconfig');
-  //ALTER TABLE users ADD CONSTRAINT fk_grade_id FOREIGN KEY (grade_id) REFERENCES grades(id);
+  const Sequelize = require('sequelize');
 
   class DB {
+
     constructor( config ) {
-        this.connection = mysql.createConnection(dbconfig.localhost);
-    }
-    query( sql, args ) {
-        return new Promise( ( resolve, reject ) => {
-            this.connection.query( sql, args, ( err, rows ) => {
-                if ( err )
-                    return reject( err );
-                resolve( rows );
-            } );
-        } );
-    }
-    close() {
-        return new Promise( ( resolve, reject ) => {
-            this.connection.end( err => {
-                if ( err )
-                    return reject( err );
-                resolve();
-            } );
-        } );
-    }
-    createTables(film){
-      const tables = ['characters', 'locations', 'types'];
-      tables.forEach((tableName) => this.createAndPopulateSimpleTables(tableName, film[tableName]));
-      // this.createScenesTables(film.scenes);
-    }
-    createAndPopulateSimpleTables(name, values){
-      const db = this;
-
-      this.query(this.getQuery('deleteTable', name))
-      .then( data => db.query(db.getQuery('createTable', name)))
-      .then( data => {
-        return db.insertValues(name, values);
-      })
-      .then(rows => console.log(name, rows), err => console.log(name, err));
-    }
-    insertValues(tableName, values){
-      const db = this;
-      const promises = values.map(val => {
-        db.query(db.getQuery('insertValue', tableName, val))
-        // db.query(`INSERT INTO ${tableName} (name) VALUES ('${val}')`)
+      const dbConf = dbconfig.localhost;
+        this.sequelize = new Sequelize(dbConf.database, dbConf.user, dbConf.password, {
+        host: dbConf.server,
+        dialect: 'mysql',
+        pool: {
+          max: 5,
+          min: 0,
+          acquire: 30000,
+          idle: 10000
+        }
       });
-      return Promise.all(promises);
-    }
-    getQuery(action, table, value){
-      switch (action){
-        case 'deleteTable':
-          return this.getDropTableQuery(table);
-        break;
-
-        case 'createTable':;
-          return this.getCreateTableQuery(table);
-        break;
-
-        case 'insertValue':
-        return this.getInsertValuesQuery(table, value);
-        break;
-      }
     }
 
-    getDropTableQuery(table){
-      return `DROP TABLE IF EXISTS ${table}`;
+    createTables(){
+      this.db = {
+        Character: this.sequelize.import('./models/character'),
+        Location: this.sequelize.import('./models/location'),
+        Sequence: this.sequelize.import('./models/sequence'),
+        Type: this.sequelize.import('./models/type'),
+        SequenceCharacter: this.sequelize.import('./models/sequenceCharacter')
+      };
+
+      Object.keys(this.db).forEach((modelName) => {
+        if ('associate' in this.db[modelName]) {
+          this.db[modelName].associate(this.db);
+        }
+      });
     }
 
-    getCreateTableQuery(table){
-      const columns = [
-        'id int(1) NOT NULL AUTO_INCREMENT',
-        'content varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL'
-      ];
+    populateTables(film){
+      this.createTables();
 
-      const sceneColumns = columns.concat([
-        'type_id int(1) NOT NULL AUTO_INCREMENT',
-        'location_id int(1) NOT NULL'
-      ]);
+      this.sequelize
+      .sync({force:true})
+      .then(()=>{
+        const seqs = film.sequences.map(seq => {
+          return this.db.Sequence.create(seq)
+          .then((dbSeq) => {
+            const relationPromises = [];
 
-      const sceneCharsColumn = [
-        'id int(1) NOT NULL AUTO_INCREMENT',
-        'scene_id NOT NULL',
-        'character_id NOT NULL'
-      ];
+            relationPromises.push(this.createRelationEntry(dbSeq, 'type', seq.type));
+            relationPromises.push(this.createRelationEntry(dbSeq, 'location', seq.location));
+            relationPromises.push(this.createRelationEntries(dbSeq, 'character', seq.characters));
 
-      let cols = columns;
-      if(table === 'scenes'){
-        cols = sceneColumns;
-      } else if(table === 'scene_character'){
-        cols = sceneCharsColumn;
-      }
-      cols.push('PRIMARY KEY (id)');
-
-      return `CREATE TABLE ${table} (${cols.join(', ')})ENGINE=InnoDB DEFAULT CHARSET=utf8`;
+            return Promise.all(relationPromises);
+          })
+        });
+        return Promise.all(seqs);
+      });
     }
 
-    getInsertValuesQuery(table, value) {
-      let valueOb = this.prepareObjectForInsert(table, value);
-      let keyNames = Object.keys(valueOb);
-      let keyValues = Object.values(valueOb).map((val => `'${val}'`));
+    createRelationEntry(dbSeq, name, value){
+      const tableName =  this.getTableName(name);
 
-      return `INSERT INTO ${table} (${keyNames.join(', ')}) VALUES (${keyValues.join(', ')})`;
+      return this.db[tableName]
+      .findOrCreate({ where: {name: value} })
+      .spread((dbEntry, created)=> dbSeq[`set${tableName}`].call(dbSeq, dbEntry));
     }
 
-    prepareObjectForInsert(table, value){
-      if(table === 'scenes'){
-        let scene = {};
-        scene.content = value.content;
-        return scene;
-      } else {
-        return {content: value};
-      }
+    createRelationEntries(dbSeq, name, values){
+      const tableName = this.getTableName(name);
+      let methodName = `${tableName}s`;
+
+      return Promise.all(
+        values.map((val) => {
+            return this.db[tableName]
+            .findOrCreate({where: {name:val}})
+            .spread((dbEntry,created) => dbEntry);
+          }
+        )
+      )
+      .then((dbEntries) => {
+        return dbSeq[`set${methodName}`].call(dbSeq, dbEntries)
+      });
+    }
+
+    getTableName(name){
+      return name.charAt(0).toUpperCase() + name.slice(1);
     }
   }
 module.exports = DB;
