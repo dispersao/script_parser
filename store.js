@@ -23,35 +23,113 @@
     }
 
     createTables(film){
-      const tables = ['characters', 'locations', 'types'];
-      tables.forEach((tableName) => this.createAndPopulateSimpleTables(tableName, film[tableName]));
-      // this.createScenesTables(film.scenes);
-    }
-    createAndPopulateSimpleTables(name, values){
+      const db = {
+        Character: this.sequelize.import('./models/character'),
+        Location: this.sequelize.import('./models/location'),
+        Sequence: this.sequelize.import('./models/sequence'),
+        Type: this.sequelize.import('./models/type'),
+        SequenceCharacter: this.sequelize.import('./models/sequenceCharacter')
+      };
+
+      Object.keys(db).forEach((modelName) => {
+        if ('associate' in db[modelName]) {
+          db[modelName].associate(db);
+        }
+      });
+
+      const staticData = ['characters', 'types', 'locations']
+      .map(modelType => {
+         const modelName = this.getModelName(modelType);
+
+      })
+
       this.sequelize
+      .sync({force:true})
+      .then(()=>{
+        return film.sequences.map(seq => {
+          return db.Sequence.create(seq)
+          .then((dbSeq) => {
+            let typePormise = db.Type.findOrCreate({where: {name: seq.type}})
+            .spread((dbType, created) => dbSeq.setType(dbType));
+
+            let locationPromise = db.Location.findOrCreate({where: {name: seq.location}})
+            .spread((dbLoc, created) => dbSeq.setLocation(dbLoc));
+
+            let charactersPromises = seq.characters.map(charac => {
+              return db.Character.findOrCreate({where: { name: charac}})
+              .spread((dbChar, created) => {
+                 dbSeq.setCharacters([dbChar]);
+              });
+            });
+            return Promise.all([ typePormise, locationPromise, charactersPromises]);
+          })
+        })
+      })
+      .then(arr => {
+        console.log("aeeee"+arr);
+      })
+    }
+
+
+
+
+    /**
+
+    const list= Object.keys(film).map((key) => {
+      const modelName = this.getModelName(key);
+      let formattedData = film[key];
+      if(db[modelName]){
+        if(db[modelName].formatDataForStorage){
+          formattedData = db[modelName].formatDataForStorage(film[key])
+       }
+       return db[modelName].bulkCreate(formattedData);
+     }
+   });
+
+   return Promise.all(list);*/
+
+    createAndPopulateTable(name, values){
+      return this.sequelize
       .authenticate()
       .then(() => {
-        return this.sequelize.define(name, {
+        const table = this.sequelize.define(this.getTableName(name), {
           content: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             allowNull: false
           }
         });
+        TABLES.push({name: name, table: table});
+        return table;
       })
       .then(table => {
-        TABLES.push(table);
         return table.sync({force: true});
       })
       .then(table => {
-        return values
-        .map(val => {
-          return {content: val};
-        })
-        .map(obVal=> table.create(obVal))
+        const modelSchema = values[0];
+        const associations = [];
+        Object.keys(modelSchema).forEach(attr => {
+          const corrTable = TABLES.find(table => table.name === `${attr}s`);
+
+          if(corrTable){
+            if(Array.isArray(modelSchema[attr])){
+              console.log('should create a list');
+            } else {
+              table[attr] = table.belongsTo(corrTable.table);
+              associations.push(table[attr]);
+              // corrTable.table.belongsToMany(table);
+            }
+          }
+        });
+
+        return values.map(obVal=> table.create(obVal, {include: associations}));
       })
       .catch(err => {
         console.error('error:', err);
       });
+    }
+
+    getModelName(name){
+      return name.charAt(0).toUpperCase() + name.slice(1, -1);
     }
 
     insertValues(tableName, values){
