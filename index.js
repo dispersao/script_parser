@@ -67,7 +67,7 @@ const includeNonDialogueCharsToScenes = (film) => {
 
 const store= (film) => {
   let db = new DB();
-  db.createTables(film);
+  db.populateTables(film);
 }
 
 const addUniqueElement = (chars, char, log) => {
