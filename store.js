@@ -8,13 +8,7 @@
       const dbConf = dbconfig.localhost;
         this.sequelize = new Sequelize(dbConf.database, dbConf.user, dbConf.password, {
         host: dbConf.server,
-        dialect: 'mysql',
-        pool: {
-          max: 5,
-          min: 0,
-          acquire: 30000,
-          idle: 10000
-        }
+        dialect: 'mysql'
       });
     }
 
