@@ -40,32 +40,14 @@
       this.sequelize
       .sync({force:true})
       .then(()=>{
-        const seqs=film.sequences.map(seq => {
+        const seqs = film.sequences.map(seq => {
           return this.db.Sequence.create(seq)
           .then((dbSeq) => {
             const relationPromises = [];
 
-            relationPromises.push(this.createSingleRelationEntry(dbSeq, 'type', seq.type));
-            relationPromises.push(this.createSingleRelationEntry(dbSeq, 'location', seq.location));
-            relationPromises.push(this.createListRelationEntry(dbSeq, 'character', seq.characters));
-
-            // relationPromises.push(
-            //   db.Type
-            //   .findOrCreate({where: {name: seq.type}})
-            //   .spread((dbType, created) => dbSeq.setType(dbType))
-            // );
-            //
-            // relationPromises.push(
-            //   db.Location
-            //   .findOrCreate({where: {name: seq.location}})
-            //   .spread((dbLoc, created) => dbSeq.setLocation(dbLoc))
-            // );
-
-            // let chars = seq.characters.map(charac => {
-            //   return db.Character.findOrCreate({where: { name: charac}})
-            //   .spread((dbChar, created) =>  dbChar);
-            // });
-            // relationPromises.push(Promise.all(chars).then(dbCharList => dbSeq.setCharacters(dbCharList)));
+            relationPromises.push(this.createRelationEntry(dbSeq, 'type', seq.type));
+            relationPromises.push(this.createRelationEntry(dbSeq, 'location', seq.location));
+            relationPromises.push(this.createRelationEntries(dbSeq, 'character', seq.characters));
 
             return Promise.all(relationPromises);
           })
@@ -74,18 +56,17 @@
       });
     }
 
-    createSingleRelationEntry(dbSeq, name, value){
-      const tableName =  name.charAt(0).toUpperCase() + name.slice(1);
+    createRelationEntry(dbSeq, name, value){
+      const tableName =  this.getTableName(name);
 
       return this.db[tableName]
       .findOrCreate({ where: {name: value} })
       .spread((dbEntry, created)=> dbSeq[`set${tableName}`].call(dbSeq, dbEntry));
     }
 
-    createListRelationEntry(dbSeq, name, values){
-      const tableName =  name.charAt(0).toUpperCase() + name.slice(1);
-      const methodName = `${tableName}s`;
-      console.log(tableName, methodName);
+    createRelationEntries(dbSeq, name, values){
+      const tableName = this.getTableName(name);
+      let methodName = `${tableName}s`;
 
       return Promise.all(
         values.map((val) => {
@@ -100,5 +81,8 @@
       });
     }
 
+    getTableName(name){
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    }
   }
 module.exports = DB;
