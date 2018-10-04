@@ -1,9 +1,10 @@
 const fountain = require('./fountain-master/index');
 const fs = require('fs');
-const DB = require('./store')
+const DB = require('./store');
 
+let fountainFile = process.argv.length > 2 ? process.argv[2] : 'dispersao.fountain';
 
-fs.readFile('dispersao_v2.fountain', 'utf-8', (err, data) => {
+fs.readFile(fountainFile, 'utf-8', (err, data) => {
   if(err){
     console.log(err)
   } else {
@@ -11,7 +12,6 @@ fs.readFile('dispersao_v2.fountain', 'utf-8', (err, data) => {
     const film = fountain.parse(data, true, processTokens);
     includeNonDialogueCharsToScenes(film);
     store(film);
-
   }
 });
 
@@ -31,11 +31,9 @@ const processTokens = output => {
         addUniqueElement(types, sequence.type);
         addUniqueElement(locations, sequence.location);
 
-        // sequence.id = token.scene_number;
         sequences.push(sequence);
       } else if(sequence){
         if(token.type === 'dialogue_begin'){
-          // sequence.content+= '<br />';
         } else if(token.type === 'character'){
           const char = token.text;
           addUniqueElement(sequence.characters, char);
@@ -49,7 +47,6 @@ const processTokens = output => {
         }
       }
     });
-    // console.log(sequences);
     return {sequences: sequences, characters: characters, types: types, locations: locations};
 }
 
