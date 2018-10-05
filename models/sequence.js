@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Sequence = sequelize.define('sequence', {
     content: DataTypes.TEXT,
-    enabled: DataTypes.BOOLEAN
+    isEnabled:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true }
   },{
     timestamps: false
   });
@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
   };
 
     Sequence.formatData = (val) => {
-      val.enabled = true;
+      val.isEnabled = true;
+      console.log(val);
       return val;
     }
 
