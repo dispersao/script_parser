@@ -26,11 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-    Sequence.formatData = (val) => {
-      val.isEnabled = true;
-      console.log(val);
-      return val;
-    }
+    Sequence.formatData = (val) =>  val;
 
   return Sequence;
 };
