@@ -1,6 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const Character = sequelize.define('character', {
     name: DataTypes.STRING,
+  },{
+    timestamps: false
   });
 
   Character.associate = (models) => {
@@ -10,9 +12,15 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  Character.formatDataForStorage = (arr) => {
-    return arr.map(str => new Object({name:str}))
+  Character.associate = (models) => {
+    Character.belongsToMany(models.Part, {
+      foreignKey: 'characterId',
+      through: models.PartCharacter
+    });
   };
+
+  Character.formatData = (str) => new Object({name :str})
+
 
   return Character;
 };
