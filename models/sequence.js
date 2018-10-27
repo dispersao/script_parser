@@ -14,10 +14,12 @@ module.exports = (sequelize, DataTypes) => {
 
     Sequence.belongsTo(models.Location, {
       foreignKey: 'locationId',
+      as: 'location'
     });
 
     Sequence.belongsTo(models.Type, {
       foreignKey: 'typeId',
+      as: 'type'
     });
 
     Sequence.hasMany(models.Part, {

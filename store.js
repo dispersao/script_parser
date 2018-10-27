@@ -67,6 +67,28 @@
       });
     }
 
+    init(){
+      this.createTables();
+      return this.sequelize.sync();
+    }
+
+    search(query, field){
+      return this.init()
+      .then(()=> {
+        return this.db.Sequence.findAll({
+                where: {
+                   '$location.name$': query
+                },
+                include: [
+                    {model: this.db.Location,  as: 'location'}
+                ]
+            });
+          }, (err)=>{
+            return Promise.reject(err);
+          });
+
+    }
+
     createRelationEntry(dbObj, name, value){
       const tableName =  this.getTableName(name);
 

@@ -29,8 +29,8 @@ const processTokens = output => {
         case 'scene_heading':
           sequence = {characters:[], content:'', actions:[], parts: []};
           const type_location = token.text.split('-');
-          sequence.type = type_location[0];
-          sequence.location = type_location[1];
+          sequence.type = type_location[0].trim();
+          sequence.location = type_location[1].trim();
 
           addUniqueElement(types, sequence.type);
           addUniqueElement(locations, sequence.location);
@@ -63,7 +63,7 @@ const processTokens = output => {
           sequence.parts.push({index: sequence.parts.length, type: 'action', content: token.text});
         break;
       }
-      if(sequence && token.text != undefined){
+      if(sequence && token.text != undefined && token.type !== 'scene_heading'){
         sequence.content+= token.text + '<br />';
       }
     });
