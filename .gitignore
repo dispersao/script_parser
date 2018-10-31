@@ -5,9 +5,10 @@
 # node.js
 #
 node_modules/
+client/node_modules/
 npm-debug.log
 yarn-error.log
 
-dbconfig.js
+config/dbconfig.js
 *.fountain
-fountain-master/
+utils/fountain-master/
