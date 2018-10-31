@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.4",
     "fountain-js": "0.0.1",
     "mysql2": "^1.6.1",
     "sequelize": "^4.39.0"
