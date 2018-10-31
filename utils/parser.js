@@ -1,6 +1,6 @@
 const fountain = require('./fountain-master/index');
 const fs = require('fs');
-const DB = require('./store');
+const DB = require('../models/store');
 
 let fountainFile = process.argv.length > 2 ? process.argv[2] : 'dispersao.fountain';
 

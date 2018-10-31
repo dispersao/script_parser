@@ -1,5 +1,5 @@
 
-  const dbconfig = require('./dbconfig');
+  const dbconfig = require('../config/dbconfig');
   const Sequelize = require('sequelize');
 
   class DB {
@@ -14,14 +14,13 @@
 
     createTables(){
       this.db = {
-        Character: this.sequelize.import('./models/character'),
-        Location: this.sequelize.import('./models/location'),
-        Sequence: this.sequelize.import('./models/sequence'),
-        Type: this.sequelize.import('./models/type'),
-        Part: this.sequelize.import('./models/part'),
-        SequenceCharacter: this.sequelize.import('./models/sequenceCharacter'),
-        PartCharacter: this.sequelize.import('./models/partCharacter'),
-        // SequencePart: this.sequelize.import('./models/sequencePart'),
+        Character: this.sequelize.import('./db/character'),
+        Location: this.sequelize.import('./db/location'),
+        Sequence: this.sequelize.import('./db/sequence'),
+        Type: this.sequelize.import('./db/type'),
+        Part: this.sequelize.import('./db/part'),
+        SequenceCharacter: this.sequelize.import('./db/sequenceCharacter'),
+        PartCharacter: this.sequelize.import('./db/partCharacter'),
       };
 
       Object.keys(this.db).forEach((modelName) => {
