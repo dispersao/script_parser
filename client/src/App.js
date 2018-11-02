@@ -10,24 +10,29 @@ class App extends Component {
 
   constructor(){
     super();
-    this.state = {characters: [], types: [], locations: [], submitEnabled: true, selectedFilters: null};
+    this.state = {filters: {characters: [], types: [], locations: []}, submitEnabled: true, selectedFilters: null};
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleScriptLoaded = this.handleScriptLoaded.bind(this);
   }
 
   handleFilterChanged(filtername, elements) {
-    let ob = {submitEnabled: true};
-    ob[filtername] = elements;
+    let ob = {submitEnabled: true, filters: this.state.filters};
+    ob.filters[filtername] = elements;
     this.setState(ob);
   }
 
   handleSubmit(){
-    const selectedFilters = {
-      characers: this.state.characters,
-      types: this.state.types,
-      locations: this.state.loactions
-    };
+    let selectedFilters = {};
+
+    Object.keys(this.state.filters).reduce((selFil, key)=> {
+      if(this.state.filters[key] && this.state.filters[key].length > 0){
+        const filteredIds =  this.state.filters[key].map(el => el.value);
+        selFil[key] = filteredIds;
+      }
+      return selFil;
+    }, selectedFilters);
+
     this.setState({selectedFilters: selectedFilters, submitEnabled:false});
   }
 
@@ -36,18 +41,17 @@ class App extends Component {
   }
 
   render() {
-    const elements= ['characters', 'locations', 'types'];
-    const elementViews = elements.map((el,idx) => {
+    const elementViews = Object.keys(this.state.filters).map((el,idx) => {
       return <Filter name={el}
         key={idx}
         onChange={this.handleFilterChanged}
-        selected={this.state[el]}/>
+        selected={this.state.filters[el]}/>
     });
 
     return (
-      <div className="App">
+      <div className="App row">
         <section
-          className="FiltersContainer">
+          className="FiltersContainer col-sm-5">
           {elementViews}
           <Button
             className="Submit"
@@ -56,7 +60,7 @@ class App extends Component {
             Submit
           </Button>
         </section>
-        <section className="ScriptContainer">
+        <section className="ScriptContainer col-sm-8">
           <Screenplay
             filters={this.state.selectedFilters}
             onLoad={this.handleScriptLoaded}>
