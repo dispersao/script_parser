@@ -66,17 +66,15 @@ const Searcher = (()=>{
       //   }]
       // })
 
-
+    let promises= [];
     if(filters.locations){
-      queries.where.locationId = {[Op.or]: filters.locations.split(',')};
-      promise = store.db.Sequence.findAll(queries);
+      promises.push(Promise.resolve({locationId:{[Op.or]: filters.locations.split(',')}}));
     }
     if(filters.types){
-      queries.where.typeId = {[Op.or]: filters.types.split(',')};
-      promise = store.db.Sequence.findAll(queries);
+      promises.push(Promise.resolve({typeId:{[Op.or]: filters.types.split(',')}}));
     }
     if(filters.characters){
-      promise = store.db.Part.findAll({
+      promises.push(store.db.Part.findAll({
         attributes: ['sequenceId'],
         include: {
           model: store.db.Character, attributes: [], where:
@@ -86,11 +84,15 @@ const Searcher = (()=>{
         }
       })
       .then(parts => {
-        queries.where.id = {[Op.or]: parts.map(part => part.sequenceId)};
-        return store.db.Sequence.findAll(queries);
-      })
+        return {id: {[Op.or]: parts.map(part => part.sequenceId)}};
+      }));
     }
-    return promise;
+
+    return Promise.all(promises)
+    .then(whereQueries => {
+      queries.where = Object.assign.apply(Object, [{}].concat(whereQueries));
+      return store.db.Sequence.findAll(queries);
+    });
   }
 
   this.search = search;

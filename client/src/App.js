@@ -33,11 +33,14 @@ class App extends Component {
       return selFil;
     }, selectedFilters);
 
+    if(Object.keys(selectedFilters).length === 0){
+      selectedFilters.all=[true];
+    }
     this.setState({selectedFilters: selectedFilters, submitEnabled:false});
   }
 
   handleScriptLoaded(){
-    console.log('loaded!');
+    this.setState({submitEnabled:true})
   }
 
   render() {
@@ -51,7 +54,7 @@ class App extends Component {
     return (
       <div className="App row">
         <section
-          className="FiltersContainer col-sm-5">
+          className="FiltersContainer col-sm-4">
           {elementViews}
           <Button
             className="Submit"
