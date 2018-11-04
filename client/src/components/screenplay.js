@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Sequence from './sequence';
 
 
 class Screenplay extends Component {
@@ -39,11 +40,20 @@ class Screenplay extends Component {
   }
 
   render() {
+    const seqsRendered = this.state.sequences.map((sequence, idx)=>{
+      return (
+        <Sequence key={idx}
+        id={sequence.id}
+        type={sequence.type}
+        location={sequence.location}>
+        </Sequence>
+      )
+    });
 
     return (
       <div className="ScreenplayContainer">
         <div className="Screenplay">
-        {JSON.stringify(this.state.sequences)}
+          {seqsRendered}
         </div>
       </div>
     );
