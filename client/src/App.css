@@ -48,3 +48,24 @@
 .Submit {
   margin: 5px 0;
 }
+
+.SequenceTitle {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.SequenceContainer {
+  padding: 30px;
+}
+
+.partContent {
+  margin-bottom: 10px;
+}
+
+.partContainer {
+  margin-bottom: 10px;
+}
+
+.light {
+  color: #cfcfcf;
+}

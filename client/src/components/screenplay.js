@@ -45,7 +45,8 @@ class Screenplay extends Component {
         <Sequence key={idx}
         id={sequence.id}
         type={sequence.type}
-        location={sequence.location}>
+        location={sequence.location}
+        parts={sequence.parts}>
         </Sequence>
       )
     });
