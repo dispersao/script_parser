@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Sequence = sequelize.define('sequence', {
-    content: DataTypes.TEXT,
+    // content: DataTypes.TEXT,
     isEnabled:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true }
   },{
     timestamps: false
