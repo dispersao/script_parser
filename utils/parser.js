@@ -58,9 +58,15 @@ const processTokens = output => {
         break;
 
         case 'action':
-          const action = token.text;
+          let action = token.text;
           sequence.actions.push(action);
-          sequence.parts.push({index: sequence.parts.length, type: 'action', content: token.text});
+          let type = 'action';
+          const regExp = new RegExp("(\\-\\-)(.*)(\\-\\-)", 'gm');
+          if(action.match(regExp)){
+            type = "observation";
+            action = action.replace(regExp, '$2')
+          }
+          sequence.parts.push({index: sequence.parts.length, type: type , content: action});
         break;
       }
       if(sequence && token.text != undefined && token.type !== 'scene_heading'){

@@ -36,6 +36,15 @@
       return this.sequelize
       .sync({force:true})
       .then(()=>{
+
+        let promises = [];
+
+        promises.push(this.createSimpleEntry('location', film.sequences.map(seq => seq.location)));
+        promises.push(this.createSimpleEntry('type', film.sequences.map(seq => seq.type)));
+        promises.push(this.createSimpleEntry('character', [].concat(...film.sequences.map(seq => seq.characters))));
+        return Promise.all(promises);
+      })
+      .then(()=>{
         const seqs = film.sequences.map(seq => {
           return this.db.Sequence.create(seq)
           .then((dbSeq) => {
@@ -52,7 +61,11 @@
                   const part = seq.parts.find(part => {
                     return part.content == dbVals.content && part.index == dbVals.index && part.type == dbVals.type
                   });
-                  return this.createRelationEntries(dbPart, 'character', part.characters);
+                  if(part.characters){
+                    return this.createRelationEntries(dbPart, 'character', part.characters);
+                  } else {
+                    return null;
+                  }
                 });
               return Promise.all(maped);
             });
@@ -71,22 +84,14 @@
       return this.sequelize.sync();
     }
 
-    search(query, field){
-      return this.init()
-      .then(()=> {
-        return this.db.Sequence.findAll({
-                where: {
-                   '$location.name$': query
-                },
-                include: [
-                    {model: this.db.Location,  as: 'location'}
-                ]
-            });
-          }, (err)=>{
-            return Promise.reject(err);
-          });
-
+    createSimpleEntry(name, values){
+      const tableName =  this.getTableName(name);
+      values = [...new Set(values)];
+      let valuesFormatted = values.map(v => this.db[tableName].formatData(v));
+      console.log(valuesFormatted);
+      return this.db[tableName].bulkCreate(valuesFormatted);
     }
+
 
     createRelationEntry(dbObj, name, value){
       const tableName =  this.getTableName(name);
