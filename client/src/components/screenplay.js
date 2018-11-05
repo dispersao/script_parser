@@ -46,7 +46,8 @@ class Screenplay extends Component {
         id={sequence.id}
         type={sequence.type}
         location={sequence.location}
-        parts={sequence.parts}>
+        parts={sequence.parts}
+        reducedView={this.props.reducedView}>
         </Sequence>
       )
     });

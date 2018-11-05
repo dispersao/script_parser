@@ -10,10 +10,21 @@ class App extends Component {
 
   constructor(){
     super();
-    this.state = {filters: {characters: [], types: [], locations: []}, submitEnabled: true, selectedFilters: null};
+    this.state = {
+      filters: {
+        characters: [],
+        types: [],
+        locations: []
+      },
+      submitEnabled: true,
+      selectedFilters: null,
+      isReducedView: false
+    };
+
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleScriptLoaded = this.handleScriptLoaded.bind(this);
+    this.handleReduce = this.handleReduce.bind(this);
   }
 
   handleFilterChanged(filtername, elements) {
@@ -39,6 +50,11 @@ class App extends Component {
     this.setState({selectedFilters: selectedFilters, submitEnabled:false});
   }
 
+  handleReduce(event){
+    this.setState({isReducedView: event.target.checked});
+
+  }
+
   handleScriptLoaded(){
     this.setState({submitEnabled:true})
   }
@@ -54,7 +70,7 @@ class App extends Component {
     return (
       <div className="App row">
         <section
-          className="FiltersContainer col-sm-4">
+          className="FiltersContainer col-sm-3">
           {elementViews}
           <Button
             className="Submit"
@@ -62,11 +78,18 @@ class App extends Component {
             onClick={this.handleSubmit}>
             Submit
           </Button>
+          <div className="input-group">
+            <span>
+              <input type="checkbox" onChange={this.handleReduce} checked={this.state.isReducedView}/>
+            </span>
+            <span> reduced</span>
+          </div>
         </section>
-        <section className="ScriptContainer col-sm-8">
+        <section className="ScriptContainer col-sm-9">
           <Screenplay
             filters={this.state.selectedFilters}
-            onLoad={this.handleScriptLoaded}>
+            onLoad={this.handleScriptLoaded}
+            reducedView={this.state.isReducedView}>
           </Screenplay>
         </section>
       </div>
