@@ -5,12 +5,12 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   });
 
-  // Character.associate = (models) => {
-  //   Character.belongsToMany(models.Sequence, {
-  //     foreignKey: 'characterId',
-  //     through: models.SequenceCharacter
-  //   });
-  // };
+  Character.associate = (models) => {
+    Character.belongsToMany(models.Sequence, {
+      foreignKey: 'characterId',
+      through: models.SequenceCharacter
+    });
+  };
 
   Character.associate = (models) => {
     Character.belongsToMany(models.Part, {
