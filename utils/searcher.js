@@ -65,7 +65,7 @@ const Searcher = (()=>{
       if(filters.characters){
         let ids = filters.characters.ids.split(',');
 
-        let p = store.db.Sequence.findAll({
+        let promise = store.db.Sequence.findAll({
           attributes: ['id'],
           include: {
             model: store.db.Character, attributes: ['id'], where:{id: {[Op.in]: ids}}
@@ -82,7 +82,7 @@ const Searcher = (()=>{
           return {id: {[seqOperator]: seqs.map(s => s.id)}};
         })
 
-        promises.push(p);
+        promises.push(promise);
 
         //  promises.push(store.db.Part.findAll({
         //   attributes: ['sequenceId'],

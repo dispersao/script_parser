@@ -83,7 +83,7 @@ const includeNonDialogueCharsToScenes = (film) => {
     .forEach(actionPart => {
       actionPart.characters = [];
       film.characters.forEach(char => {
-        const reg = new RegExp(`\\b${char}\\b`, 'gmi');
+        const reg = new RegExp(`\\b${char}\\b(?!\\*)`, 'gmi');
         if(actionPart.content.match(reg)){
           addUniqueElement(sequence.characters, char, true);
           addUniqueElement(actionPart.characters, char, true);
