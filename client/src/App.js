@@ -3,7 +3,7 @@ import './App.css';
 import Screenplay from './components/screenplay';
 import Filter from './components/filter';
 import Button from 'react-bootstrap/lib/Button';
-
+import _ from 'lodash';
 
 
 class App extends Component {
@@ -12,9 +12,9 @@ class App extends Component {
     super();
     this.state = {
       filters: {
-        characters: [],
-        types: [],
-        locations: []
+        characters: {ids:[], and:false, exclusive:false},
+        types: {ids:[], and:false, exclusive:false},
+        locations: {ids:[], and:false, exclusive:false}
       },
       submitEnabled: true,
       selectedFilters: null,
@@ -27,22 +27,22 @@ class App extends Component {
     this.handleReduce = this.handleReduce.bind(this);
   }
 
-  handleFilterChanged(filtername, elements) {
+  handleFilterChanged(filtername, filterfield, value) {
     let ob = {submitEnabled: true, filters: this.state.filters};
-    ob.filters[filtername] = elements;
+    var newOb = {};
+    newOb[filterfield] = value;
+    ob.filters[filtername] = Object.assign(ob.filters[filtername], newOb);
+    if(ob.filters[filtername]['exclusive'] && !ob.filters[filtername]['and']){
+      ob.filters[filtername]['and'] = true;
+    }
     this.setState(ob);
   }
 
   handleSubmit(){
-    let selectedFilters = {};
+    let filters =  _.cloneDeep(this.state.filters);
 
-    Object.keys(this.state.filters).reduce((selFil, key)=> {
-      if(this.state.filters[key] && this.state.filters[key].length > 0){
-        const filteredIds =  this.state.filters[key].map(el => el.value);
-        selFil[key] = filteredIds;
-      }
-      return selFil;
-    }, selectedFilters);
+    _.each(filters, el => el['ids'] = el['ids'].map(e=>e.value));
+    const selectedFilters = _.pickBy(filters, el => el.ids.length);
 
     if(Object.keys(selectedFilters).length === 0){
       selectedFilters.all=[true];
@@ -52,7 +52,6 @@ class App extends Component {
 
   handleReduce(event){
     this.setState({isReducedView: event.target.checked});
-
   }
 
   handleScriptLoaded(){
@@ -64,7 +63,11 @@ class App extends Component {
       return <Filter name={el}
         key={idx}
         onChange={this.handleFilterChanged}
-        selected={this.state.filters[el]}/>
+        selected={this.state.filters[el]['ids']}
+        andor={el === 'characters'}
+        and={this.state.filters[el]['and']}
+        exclusive={this.state.filters[el]['exclusive']}
+        />
     });
 
     return (
@@ -72,18 +75,19 @@ class App extends Component {
         <section
           className="FiltersContainer col-sm-3">
           {elementViews}
+
+          <label className="btn btn-default">
+            <input type="checkbox"
+             onChange={this.handleReduce}
+             checked={this.state.isReducedView}/>
+             reduced
+          </label>
           <Button
             className="Submit"
             disabled={!this.state.submitEnabled}
             onClick={this.handleSubmit}>
             Submit
           </Button>
-          <div className="input-group">
-            <span>
-              <input type="checkbox" onChange={this.handleReduce} checked={this.state.isReducedView}/>
-            </span>
-            <span> reduced</span>
-          </div>
         </section>
         <section className="ScriptContainer col-sm-9">
           <Screenplay

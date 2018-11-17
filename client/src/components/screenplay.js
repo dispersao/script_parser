@@ -10,17 +10,16 @@ class Screenplay extends Component {
   }
 
   componentDidMount() {
-    console.log('Screenplay: componentmounting');
+    // console.log('Screenplay: componentmounting');
   }
   componentWillUpdate() {
-    console.log("Screenplay: componentWillUpdate");
+    // console.log("Screenplay: componentWillUpdate");
   }
 
   componentWillReceiveProps(nextProps){
     if(nextProps.filters && JSON.stringify(nextProps.filters) !== JSON.stringify(this.props.filters)){
 
       const filters = this.getfiltersQuery(nextProps.filters);
-      console.log(nextProps, filters);
       this.setState({'sequences': [], loading: true});
 
       fetch(`/sequences?${filters}`)
@@ -34,9 +33,20 @@ class Screenplay extends Component {
 
   getfiltersQuery(filters){
     const mapedFilters = Object.keys(filters).map(key => {
-      return `${key}=${filters[key].join(",")}`;
+      let filterStr = '';
+
+      if(filters[key]['ids']){
+        filterStr = `filter[${key}][ids]=${filters[key]['ids'].join(',')}`;
+      }
+      if(filters[key]['exclusive']){
+        filterStr+=`&filter[${key}][exclusive]=1`;
+      }
+      if(filters[key]['and']){
+        filterStr+=`&filter[${key}][and]=1`
+      }
+      return filterStr;
     });
-    return mapedFilters.join("&");
+    return mapedFilters.filter(Boolean).join("&");
   }
 
   render() {
