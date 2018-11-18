@@ -1,7 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const Sequence = sequelize.define('sequence', {
-    // content: DataTypes.TEXT,
-    isEnabled:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true }
+    // isEnabled:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+    isPlaying:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+    hasPlayed:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
   },{
     timestamps: false
   });
@@ -9,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   Sequence.associate = (models) => {
     Sequence.belongsToMany(models.Character, {
       foreignKey: 'sequenceId',
-      through: models.SequenceCharacter
+      through: models.SequenceCharacter,
     });
 
     Sequence.belongsTo(models.Location, {
@@ -24,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Sequence.hasMany(models.Part, {
       foreignKey: 'sequenceId',
+      as: 'parts'
       // through: models.SequencePart
     });
   };

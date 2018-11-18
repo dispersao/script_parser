@@ -12,14 +12,13 @@ module.exports = (sequelize, DataTypes) => {
 
     Part.belongsToMany(models.Character, {
       foreignKey: 'partId',
-      through: models.PartCharacter
+      through: models.PartCharacter,
+      as: 'characters'
     });
 
     Part.belongsTo(models.Sequence, {
-    // Part.belongsToMany(models.Sequence, {
       foreignKey: 'sequenceId',
-      // foreignKey: 'partId',
-      // through: models.SequencePart
+      as: 'sequences'
     });
   };
 

@@ -8,14 +8,16 @@ module.exports = (sequelize, DataTypes) => {
   Character.associate = (models) => {
     Character.belongsToMany(models.Sequence, {
       foreignKey: 'characterId',
-      through: models.SequenceCharacter
+      through: models.SequenceCharacter,
+      as: 'sequences'
     });
   };
 
   Character.associate = (models) => {
     Character.belongsToMany(models.Part, {
       foreignKey: 'characterId',
-      through: models.PartCharacter
+      through: models.PartCharacter,
+      as: 'parts'
     });
   };
 
