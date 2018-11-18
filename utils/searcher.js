@@ -41,10 +41,10 @@ const Searcher = (()=>{
       include: [
           {model: store.db.Location,  as: 'location'},
           {model: store.db.Type,  as: 'type'},
-          {model: store.db.Part, attributes: [
+          {model: store.db.Part, as:'parts', attributes: [
             'index','content', 'type', 'extra'
           ], include: [
-            {model: store.db.Character, attributes: {exclude: ['part_character']}}
+            {model: store.db.Character, as:'characters', attributes: {exclude: ['part_character']}}
           ]}
       ]
     };
@@ -66,36 +66,33 @@ const Searcher = (()=>{
         let ids = filters.characters.ids.split(',');
 
         let promise = store.db.Sequence.findAll({
-          attributes: ['id'],
-          include: {
-            model: store.db.Character, attributes: ['id'], where:{id: {[Op.in]: ids}}
-          }
+          include: [{
+              model: store.db.Part,
+              as: 'parts', include:[{
+                model: store.db.Character,
+                as: 'characters'
+              }]
+          }],
+          where: {
+               '$parts.characters.id$': {[Op.in]: ids }
+           }
         })
-        .then((sequences)=> {
-          let seqs = sequences;
+        .then(seqs => {
+          let seqsChars = seqs.map(s=> {
+            let characters = s.parts.reduce((arr, p) => {
+              [...arr, ...p.characters.map(c => c.id)], []
+            })
+            characters = [...new Set(characters)];
+            return new Object({id:s.id, chars: characters});
+          })
           if(filters.characters.and){
-             seqs = sequences.filter((seq)=>{
-              return seq.characters.length === ids.length;
-            });
+            seqsChars = seqsChars.filter(s=> s.chars.length === ids.length)
           }
+
           let seqOperator = filters.characters.exclusive ? Op.notIn : Op.in;
-          return {id: {[seqOperator]: seqs.map(s => s.id)}};
-        })
-
+          return {id: {[seqOperator]: seqsChars.map(s => s.id)}};
+        });
         promises.push(promise);
-
-        //  promises.push(store.db.Part.findAll({
-        //   attributes: ['sequenceId'],
-        //   include: {
-        //     model: store.db.Character, attributes: [], where:
-        //     {
-        //       id: {[Op.in]: filters.characters.ids.split(',')}
-        //     }
-        //   }
-        // })
-        // .then(parts => {
-        //   return {id: {[Op.in]: parts.map(part => part.sequenceId)}};
-        // }));
       }
     }
 
