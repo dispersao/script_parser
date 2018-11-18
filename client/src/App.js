@@ -32,9 +32,7 @@ class App extends Component {
     var newOb = {};
     newOb[filterfield] = value;
     ob.filters[filtername] = Object.assign(ob.filters[filtername], newOb);
-    if(ob.filters[filtername]['exclusive'] && !ob.filters[filtername]['and']){
-      ob.filters[filtername]['and'] = true;
-    }
+  
     this.setState(ob);
   }
 
