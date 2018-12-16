@@ -36,8 +36,8 @@ const Searcher = (()=>{
 
     let promise;
     let queries = {
-      where:{isEnabled: true},
-      attributes: { exclude: ['isEnabled','locationId', 'typeId', 'content'] },
+      where:{hasPlayed: false},
+      attributes: { exclude: ['isPlaying', 'locationId', 'typeId', 'content'] },
       include: [
           {model: store.db.Location,  as: 'location'},
           {model: store.db.Type,  as: 'type'},
@@ -79,9 +79,10 @@ const Searcher = (()=>{
         })
         .then(seqs => {
           let seqsChars = seqs.map(s=> {
-            let characters = s.parts.reduce((arr, p) => {
-              [...arr, ...p.characters.map(c => c.id)], []
-            })
+            let characters = s.parts.map(p => {
+              return p.characters.map(c => c.id);
+            });
+            characters = [].concat(...characters);
             characters = [...new Set(characters)];
             return new Object({id:s.id, chars: characters});
           })
