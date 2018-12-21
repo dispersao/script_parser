@@ -23,6 +23,7 @@ class App extends Component {
 
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleGetScript = this.handleGetScript.bind(this);
     this.handleScriptLoaded = this.handleScriptLoaded.bind(this);
     this.handleReduce = this.handleReduce.bind(this);
   }
@@ -32,20 +33,27 @@ class App extends Component {
     var newOb = {};
     newOb[filterfield] = value;
     ob.filters[filtername] = Object.assign(ob.filters[filtername], newOb);
-  
+
     this.setState(ob);
   }
 
   handleSubmit(){
+    const selectedFilters = this.getSelectedFilters('all');
+    this.setState({selectedFilters: selectedFilters, submitEnabled:false});
+  }
+
+  handleGetScript(){
+    const selectedFilters = this.getSelectedFilters(`script:${Math.random()}`);
+    this.setState({selectedFilters: selectedFilters, submitEnabled:false});
+  }
+  getSelectedFilters(sequences){
     let filters =  _.cloneDeep(this.state.filters);
 
     _.each(filters, el => el['ids'] = el['ids'].map(e=>e.value));
     const selectedFilters = _.pickBy(filters, el => el.ids.length);
+    selectedFilters.sequences=[sequences];
 
-    if(Object.keys(selectedFilters).length === 0){
-      selectedFilters.all=[true];
-    }
-    this.setState({selectedFilters: selectedFilters, submitEnabled:false});
+    return selectedFilters;
   }
 
   handleReduce(event){
@@ -84,7 +92,13 @@ class App extends Component {
             className="Submit"
             disabled={!this.state.submitEnabled}
             onClick={this.handleSubmit}>
-            Submit
+            Sequence List
+          </Button>
+          <Button
+            className="Submit"
+            disabled={!this.state.submitEnabled}
+            onClick={this.handleGetScript}>
+            Generate Random Screenplay
           </Button>
         </section>
         <section className="ScriptContainer col-sm-9">

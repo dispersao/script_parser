@@ -18,17 +18,34 @@ class Screenplay extends Component {
 
   componentWillReceiveProps(nextProps){
     if(nextProps.filters && JSON.stringify(nextProps.filters) !== JSON.stringify(this.props.filters)){
+      console.log(nextProps.filters.sequences, nextProps.filters.sequences.indexOf('script'));
+      if(nextProps.filters.sequences[0] === 'all'){
 
-      const filters = this.getfiltersQuery(nextProps.filters);
-      this.setState({'sequences': [], loading: true});
+        const filters = this.getfiltersQuery(nextProps.filters);
+        this.setState({'sequences': [], loading: true});
 
-      fetch(`/sequences?${filters}`)
-      .then(res => res.json())
-      .then(sequences => {
-        this.setState({ 'sequences': sequences, loading: false });
-        this.props.onLoad();
-      });
+        fetch(`/sequences?${filters}`)
+        .then(res => res.json())
+        .then(sequences => {
+          this.setState({ 'sequences': sequences, loading: false });
+          this.props.onLoad();
+        });
+      } else if(nextProps.filters.sequences[0].indexOf('script') >=0){
+        this.startScript(nextProps.filters);
+      }
     }
+  }
+
+  startScript(filters){
+    let filts = this.getfiltersQuery(filters);
+    filts+= '&count=1&order=rand';
+
+    fetch(`/sequences?${filts}`)
+    .then(res => res.json())
+    .then(sequence => {
+      this.setState({ 'sequences': [sequence] , loading: false });
+      this.props.onLoad();
+    });
   }
 
   getfiltersQuery(filters){
