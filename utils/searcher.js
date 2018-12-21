@@ -37,7 +37,7 @@ const Searcher = (()=>{
     let promise;
     let queries = {
       where:{hasPlayed: false},
-      attributes: { exclude: ['isPlaying', 'locationId', 'typeId', 'content'] },
+      // attributes: { exclude: ['isPlaying', 'locationId', 'typeId', 'content'] },
       include: [
           {model: store.db.Location,  as: 'location'},
           {model: store.db.Type,  as: 'type'},
@@ -100,7 +100,14 @@ const Searcher = (()=>{
     return Promise.all(promises)
     .then(whereQueries => {
       queries.where = Object.assign.apply(Object, [{}].concat(whereQueries));
-      return store.db.Sequence.findAll(queries);
+      if(query.order && query.order === 'rand'){
+        queries.order = Sequelize.fn('RAND');
+      }
+      if(query.count && Number(query.count) === 1){
+        return store.db.Sequence.findOne(queries);
+      } else {
+        return store.db.Sequence.findAll(queries);
+      }
     });
   }
 
