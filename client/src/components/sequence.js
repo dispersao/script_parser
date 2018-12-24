@@ -5,7 +5,9 @@ import _ from 'lodash';
 class Sequence extends Component {
 
   render() {
-    const parts = this.props.parts.map((part,idx) =>{
+    let parts = _.sortBy(this.props.parts, ['index']);
+    console.log(parts);
+    parts = parts.map((part,idx) =>{
       return (
         <Part key={idx}
         characters={part.characters}

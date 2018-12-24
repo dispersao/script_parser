@@ -76,6 +76,10 @@ class App extends Component {
         />
     });
 
+    const scriptDisabled = Object.keys(this.state.filters).some(el=> {
+      return this.state.filters[el]['ids'].length
+    });
+
     return (
       <div className="App row">
         <section
@@ -96,7 +100,7 @@ class App extends Component {
           </Button>
           <Button
             className="Submit"
-            disabled={!this.state.submitEnabled}
+            disabled={!this.state.submitEnabled || scriptDisabled}
             onClick={this.handleGetScript}>
             Generate Random Screenplay
           </Button>
@@ -105,6 +109,7 @@ class App extends Component {
           <Screenplay
             filters={this.state.selectedFilters}
             onLoad={this.handleScriptLoaded}
+            scriptLength = {30}
             reducedView={this.state.isReducedView}>
           </Screenplay>
         </section>
