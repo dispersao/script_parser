@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const searcher = require('../utils/searcher');
+const setter = require('../utils/setter');
 
 
 /* GET home page. */
@@ -29,6 +30,18 @@ router.get('/', function(req, res, next) {
   searcher.search('sequence',req.query)
   .then((list) => {
     res.json(list);
+  });
+})
+.post('/sequences', function(req, res, next) {
+  setter.update('sequence', null, req.body)
+  .then((seq) => {
+    res.json(seq);
+  })
+})
+.post('/sequences/:id', function(req, res, next) {
+  setter.update('sequence', req.params.id, req.body)
+  .then((seq) => {
+    res.json(seq);
   });
 });
 
