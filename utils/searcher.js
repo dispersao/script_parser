@@ -99,11 +99,12 @@ const Searcher = (()=>{
 
     return Promise.all(promises)
     .then(whereQueries => {
-      queries.where = Object.assign.apply(Object, [{}].concat(whereQueries));
+      queries.where = Object.assign.apply(Object, [queries.where].concat(whereQueries));
       if(query.order && query.order === 'rand'){
         queries.order = Sequelize.fn('RAND');
       }
       if(query.count && Number(query.count) === 1){
+        console.log(queries);
         return store.db.Sequence.findOne(queries);
       } else {
         return store.db.Sequence.findAll(queries);

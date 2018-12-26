@@ -30,9 +30,24 @@ class Screenplay extends Component {
           this.props.onLoad();
         });
       } else if(nextProps.filters.sequences[0].indexOf('script') >=0){
-        this.startScript(nextProps.filters);
+        this.resetSequences()
+        .then(result => {
+          this.setState({sequences: [], currentSequence: null});
+          this.startScript(nextProps.filters)
+        })
       }
     }
+  }
+
+  resetSequences(){
+    return fetch(`/sequences`,{
+      method: 'POST',
+      body: JSON.stringify({'hasPlayed':false}),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
   }
 
   startScript(filters){
@@ -58,6 +73,16 @@ class Screenplay extends Component {
     .then(sequence => {
       this.setState({ 'sequences': this.state.sequences.concat(sequence) , loading: false });
       this.setState({'currentSequence': sequence});
+      return fetch(`/sequences/${sequence.id}`,{
+        method: 'POST',
+        body: JSON.stringify({'hasPlayed':true}),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+    })
+    .then((sequence) => {
       if(this.state.sequences.length < this.props.scriptLength){
         this.startScript(this.props.filters);
       } else {
