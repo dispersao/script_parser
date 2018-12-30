@@ -13,7 +13,7 @@ class Filter extends Component {
   }
 
   componentDidMount() {
-    fetch(`/${this.props.name}`)
+    fetch(`/api/${this.props.name}`)
     .then(res => res.json())
     .then(elements => this.setState({ elements }));
   }
