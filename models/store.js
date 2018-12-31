@@ -1,11 +1,11 @@
 
-  const dbconfig = require('../config/dbconfig');
+  // const dbconfig = require('../config/dbconfig');
   const Sequelize = require('sequelize');
 
   class DB {
 
     constructor( config ) {
-      const dbConf = dbconfig.localhost;
+      const dbConf = this.getDBConfig();
         this.sequelize = new Sequelize(dbConf.database, dbConf.user, dbConf.password, {
         host: dbConf.server,
         dialect: 'mysql'
@@ -127,5 +127,19 @@
       let len = plural ? -1 : name.length;
       return name.charAt(0).toUpperCase() + name.slice(1, len);
     }
+
+    getDBConfig(){
+      let cred = {};
+      const regex = /(\/\/)([a-zA-Z0-9]+)(\:)([a-zA-Z0-9]+)(@)([a-zA-Z0-9-._]+)(\/)([a-zA-Z0-9-._]+)(?=\?)/m;
+      let dbCred = process.env.DATABASE_URL.match(regex);
+      if(dbCred && dbCred.length>=9){
+        cred.user = dbCred[2];
+        cred.password = dbCred[4];
+        cred.server = dbCred[6];
+        cred.database = dbCred[8];
+      }
+      return cred;
+    }
   }
+
 module.exports = DB;
