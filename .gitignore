@@ -12,3 +12,4 @@ yarn-error.log
 config/dbconfig.js
 *.fountain
 utils/fountain-master/
+db_dump/
