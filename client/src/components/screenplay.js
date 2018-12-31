@@ -23,7 +23,7 @@ class Screenplay extends Component {
         const filters = this.getfiltersQuery(nextProps.filters);
         this.setState({'sequences': [], loading: true});
 
-        fetch(`/sequences?${filters}`)
+        fetch(`/api/sequences?${filters}`)
         .then(res => res.json())
         .then(sequences => {
           this.setState({ 'sequences': sequences, loading: false });
@@ -40,7 +40,7 @@ class Screenplay extends Component {
   }
 
   resetSequences(){
-    return fetch(`/sequences`,{
+    return fetch(`/api/sequences`,{
       method: 'POST',
       body: JSON.stringify({'hasPlayed':false}),
       headers: {
@@ -68,12 +68,12 @@ class Screenplay extends Component {
     let filts = this.getfiltersQuery(filters);
     filts+= '&count=1&order=rand';
 
-    fetch(`/sequences?${filts}`)
+    fetch(`/api/sequences?${filts}`)
     .then(res => res.json())
     .then(sequence => {
       this.setState({ 'sequences': this.state.sequences.concat(sequence) , loading: false });
       this.setState({'currentSequence': sequence});
-      return fetch(`/sequences/${sequence.id}`,{
+      return fetch(`/api/sequences/${sequence.id}`,{
         method: 'POST',
         body: JSON.stringify({'hasPlayed':true}),
         headers: {
