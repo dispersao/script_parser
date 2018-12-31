@@ -131,7 +131,7 @@
     getDBConfig(){
       let cred = {};
       const regex = /(\/\/)([a-zA-Z0-9]+)(\:)([a-zA-Z0-9]+)(@)([a-zA-Z0-9-._]+)(\/)([a-zA-Z0-9-._]+)(?=\?)/m;
-      let dbCred = process.env.DATABASE_URL.match(regex);
+      let dbCred = process.env.CLEARDB_DATABASE_URL.match(regex);
       if(dbCred && dbCred.length>=9){
         cred.user = dbCred[2];
         cred.password = dbCred[4];
