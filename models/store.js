@@ -5,11 +5,27 @@
   class DB {
 
     constructor( config ) {
-      const dbConf = this.getDBConfig();
-        this.sequelize = new Sequelize(dbConf.database, dbConf.user, dbConf.password, {
-        host: dbConf.server,
-        dialect: 'mysql'
-      });
+    }
+
+    connect(){
+      if(!this.sequelize){
+        const dbConf = this.getDBConfig();
+          this.sequelize = new Sequelize(dbConf.database, dbConf.user, dbConf.password, {
+          host: dbConf.server,
+          dialect: 'mysql'
+        });
+        return this.sequelize.authenticate();
+      } else {
+        return Promise.resolve(true);
+      }
+    }
+
+    testAutentication(){
+      return this.sequelize.authenticate();
+    }
+
+    closeConnection(){
+      return this.sequelize.close();
     }
 
     createTables(){
@@ -80,8 +96,13 @@
     }
 
     init(){
-      this.createTables();
-      return this.sequelize.sync();
+      return this.connect()
+      .then(()=>{
+        this.createTables();
+        return this.sequelize.sync();
+      }, (err)=>{
+        return Promise.reject({status: 'error', message:'connectionError', code: err.original.errno });
+      });
     }
 
     createSimpleEntry(name, values){

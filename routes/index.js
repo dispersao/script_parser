@@ -5,43 +5,58 @@ const setter = require('../utils/setter');
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next)=> {
   res.render('index', { title: 'Express' });
 })
-.get('/types', function(req, res, next) {
+.get('/types', (req, res, next)=> {
   searcher.search('type')
   .then((list) => {
     res.json(list);
+  }, (err) => {
+    console.log(err);
+    res.json(err);
   });
 })
-.get('/locations', function(req, res, next) {
+.get('/locations', (req, res, next)=> {
   searcher.search('location')
   .then((list) => {
     res.json(list);
+  }, (err) => {
+    console.log(err);
+    res.json(err);
   });
 })
-.get('/characters', function(req, res, next) {
+.get('/characters', (req, res, next)=> {
   searcher.search('character')
   .then((list) => {
     res.json(list);
   });
 })
-.get('/sequences', function(req, res, next) {
+.get('/sequences', (req, res, next)=> {
   searcher.search('sequence',req.query)
   .then((list) => {
     res.json(list);
+  }, (err) => {
+    console.log(err);
+    res.json(err);
   });
 })
-.post('/sequences', function(req, res, next) {
+.post('/sequences', (req, res, next)=> {
   setter.update('sequence', null, req.body)
   .then((seq) => {
     res.json(seq);
+  }, (err) => {
+    console.log(err);
+    res.json(err);
   })
 })
-.post('/sequences/:id', function(req, res, next) {
+.post('/sequences/:id', (req, res, next)=> {
   setter.update('sequence', req.params.id, req.body)
   .then((seq) => {
     res.json(seq);
+  }, (err) => {
+    console.log(err);
+    res.json(err);
   });
 });
 

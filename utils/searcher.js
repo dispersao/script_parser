@@ -5,7 +5,7 @@ const Op = Sequelize.Op;
 
 const Searcher = (()=>{
 
-  const search = (modelname, query) =>{
+  const search = (modelname, query, keepLive) =>{
     store = new Store();
     return store.init()
     .then(function(){
@@ -29,7 +29,17 @@ const Searcher = (()=>{
       return promise.then((list)=>{
         return list;
       });
-    });
+    })
+    .then((list)=>{
+      if(keepLive){
+        return list;
+      } else {
+        return store.closeConnection()
+        .then((m)=>{
+          return list;
+        })
+      }
+    })
   };
 
   const getSequences = (query)=>{
@@ -104,7 +114,6 @@ const Searcher = (()=>{
         queries.order = Sequelize.fn('RAND');
       }
       if(query.count && Number(query.count) === 1){
-        console.log(queries);
         return store.db.Sequence.findOne(queries);
       } else {
         return store.db.Sequence.findAll(queries);
