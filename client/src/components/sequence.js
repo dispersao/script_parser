@@ -6,7 +6,6 @@ class Sequence extends Component {
 
   render() {
     let parts = _.sortBy(this.props.parts, ['index']);
-    console.log(parts);
     parts = parts.map((part,idx) =>{
       return (
         <Part key={idx}
@@ -38,7 +37,6 @@ class Sequence extends Component {
 
         {charactersList && charactersList.length > 0 &&
           <div className="charactersList light">
-            <span className="m5">personagens: </span>
             {charactersList}
           </div>
         }
