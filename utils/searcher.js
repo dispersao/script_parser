@@ -5,10 +5,10 @@ const Op = Sequelize.Op;
 
 const Searcher = (()=>{
 
-  const search = (modelname, query, keepLive) =>{
+  const search = (modelname, query) =>{
     store = new Store();
     return store.init()
-    .then(function(){
+    .then(()=>{
       switch(modelname){
         case 'location':
           promise = store.db.Location.findAll();
@@ -29,17 +29,7 @@ const Searcher = (()=>{
       return promise.then((list)=>{
         return list;
       });
-    })
-    .then((list)=>{
-      if(keepLive){
-        return list;
-      } else {
-        return store.closeConnection()
-        .then((m)=>{
-          return list;
-        })
-      }
-    })
+    });
   };
 
   const getSequences = (query)=>{

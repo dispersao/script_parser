@@ -8,7 +8,7 @@ const Setter = (()=>{
   const update = (modelname, id, query) =>{
     store = new Store();
     return store.init()
-    .then(function(){
+    .then(()=>{
       switch(modelname){
         case 'sequence':
           promise = updateSequence(id, query);
