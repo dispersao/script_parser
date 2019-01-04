@@ -35,6 +35,8 @@ class Screenplay extends Component {
         .then(result => {
           this.setState({sequences: [], currentSequence: null});
           this.startScript(nextProps.filters)
+        }, (err)=>{
+          console.log(err);
         });
       }
     }
@@ -54,13 +56,13 @@ class Screenplay extends Component {
     .then(res => res.json())
     .then((sequence)=>{
       return this.onSequenceFetched(sequence);
+    }, (err)=>{
+      console.log(err);
     })
     .then((sequence) => {
-      if(this.state.sequences.length < this.props.scriptLength){
-        this.startScript(this.props.filters);
-      } else {
-        this.props.onLoad();
-      }
+      return this.onSequenceSettedAsPlayed(sequence);
+    }, (err)=>{
+      console.log(err);
     });
   }
 
@@ -78,6 +80,14 @@ class Screenplay extends Component {
     filters.locations.ids = [this.state.currentSequence.location.id];
     filters.locations.exclusive = true;
     return filters;
+  }
+
+  onSequenceSettedAsPlayed(sequence){
+    if(this.state.sequences.length < this.props.scriptLength){
+      this.startScript(this.props.filters);
+    } else {
+      this.props.onLoad();
+    }
   }
 
   queryFiltersFormatted(filters, extra){
