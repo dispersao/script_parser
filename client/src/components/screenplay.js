@@ -7,6 +7,7 @@ class Screenplay extends Component {
   constructor(props){
     super(props);
     this.state = {sequences: [], loading:false, filters:{}};
+    this.onSequenceFetched = this.onSequenceFetched.bind(this);
   }
 
   componentDidMount() {
@@ -20,7 +21,7 @@ class Screenplay extends Component {
     if(nextProps.filters && JSON.stringify(nextProps.filters) !== JSON.stringify(this.props.filters)){
       if(nextProps.filters.sequences[0] === 'all'){
 
-        const filters = this.getfiltersQuery(nextProps.filters);
+        const filters = this.queryFiltersFormatted(nextProps.filters);
         this.setState({'sequences': [], loading: true});
 
         fetch(`/api/sequences?${filters}`)
@@ -30,57 +31,29 @@ class Screenplay extends Component {
           this.props.onLoad();
         });
       } else if(nextProps.filters.sequences[0].indexOf('script') >=0){
-        this.resetSequences()
+        this.setSequencePlayed(false)
         .then(result => {
           this.setState({sequences: [], currentSequence: null});
           this.startScript(nextProps.filters)
-        })
+        });
       }
     }
-  }
-
-  resetSequences(){
-    return fetch(`/api/sequences`,{
-      method: 'POST',
-      body: JSON.stringify({'hasPlayed':false}),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
   }
 
   startScript(filters){
+    let modifiedFilters = filters;
     if(this.state.currentSequence){
-      filters.characters = filters.characters || {};
-      filters.characters.and = true;
-      filters.characters.exclusive = true;
-      let characters = this.state.currentSequence.parts.map(p => {
-        return p.characters.map(c => c.id);
-      });
-      characters = [].concat(...characters);
-      characters = [...new Set(characters)];
-      filters.characters.ids = characters;
-      filters.locations = filters.locations || {};
-      filters.locations.ids = [this.state.currentSequence.location.id];
-      filters.locations.exclusive = true;
+      modifiedFilters = this.nextSequenceFilters(modifiedFilters);
     }
-    let filts = this.getfiltersQuery(filters);
-    filts+= '&count=1&order=rand';
+    modifiedFilters = Object.assign(modifiedFilters, {count:1, order:'rand'});
 
-    fetch(`/api/sequences?${filts}`)
+    let queryString = this.queryFiltersFormatted(modifiedFilters );
+    let [url, params] = this.getRequest('get', `?${queryString}`);
+
+    fetch(url, params)
     .then(res => res.json())
-    .then(sequence => {
-      this.setState({ 'sequences': this.state.sequences.concat(sequence) , loading: false });
-      this.setState({'currentSequence': sequence});
-      return fetch(`/api/sequences/${sequence.id}`,{
-        method: 'POST',
-        body: JSON.stringify({'hasPlayed':true}),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
+    .then((sequence)=>{
+      return this.onSequenceFetched(sequence);
     })
     .then((sequence) => {
       if(this.state.sequences.length < this.props.scriptLength){
@@ -91,7 +64,25 @@ class Screenplay extends Component {
     });
   }
 
-  getfiltersQuery(filters){
+  nextSequenceFilters(filters){
+    filters.characters = filters.characters || {};
+    filters.characters.and = true;
+    filters.characters.exclusive = true;
+    let characters = this.state.currentSequence.parts.map(p => {
+      return p.characters.map(c => c.id);
+    });
+    characters = [].concat(...characters);
+    characters = [...new Set(characters)];
+    filters.characters.ids = characters;
+    filters.locations = filters.locations || {};
+    filters.locations.ids = [this.state.currentSequence.location.id];
+    filters.locations.exclusive = true;
+    return filters;
+  }
+
+  queryFiltersFormatted(filters, extra){
+    delete filters["sequences"];
+
     const mapedFilters = Object.keys(filters).map(key => {
       let filterStr = '';
 
@@ -103,10 +94,43 @@ class Screenplay extends Component {
       }
       if(filters[key]['and']){
         filterStr+=`&filter[${key}][and]=1`
+      } else {
+        filterStr+=`${key}=${filters[key]}`;
       }
       return filterStr;
     });
     return mapedFilters.filter(Boolean).join("&");
+  }
+
+  onSequenceFetched(sequence) {
+    const sequences = this.state.sequences.concat(sequence);
+    this.setState({
+        sequences: sequences,
+        loading: false,
+        currentSequence: sequence
+      });
+    return this.setSequencePlayed(true, sequence);
+  }
+
+  setSequencePlayed(hasPlayed, sequence){
+    const complement = sequence ? `/${sequence.id}` : '';
+    const [url, params] = this.getRequest('post', complement, {'hasPlayed':hasPlayed});
+    return fetch(url, params);
+  }
+
+  getRequest(method, complement, body){
+    const url = `/api/sequences${complement}`;
+    const params = {
+      method: method.toUpperCase(),
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+    if(body){
+      params.body = JSON.stringify(body);
+    }
+    return [url, params];
   }
 
   render() {
