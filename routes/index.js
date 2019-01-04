@@ -14,6 +14,7 @@ router.get('/', (req, res, next)=> {
     res.json(list);
   }, (err) => {
     console.log(err);
+    res.status(406);
     res.json(err);
   });
 })
@@ -23,6 +24,7 @@ router.get('/', (req, res, next)=> {
     res.json(list);
   }, (err) => {
     console.log(err);
+    res.status(406);
     res.json(err);
   });
 })
@@ -30,6 +32,10 @@ router.get('/', (req, res, next)=> {
   searcher.search('character')
   .then((list) => {
     res.json(list);
+  }, (err) => {
+    console.log(err);
+    res.status(406);
+    res.json(err);
   });
 })
 .get('/sequences', (req, res, next)=> {
@@ -38,6 +44,7 @@ router.get('/', (req, res, next)=> {
     res.json(list);
   }, (err) => {
     console.log(err);
+    res.status(406);
     res.json(err);
   });
 })
@@ -47,6 +54,7 @@ router.get('/', (req, res, next)=> {
     res.json(seq);
   }, (err) => {
     console.log(err);
+    res.status(406);
     res.json(err);
   })
 })
@@ -56,6 +64,7 @@ router.get('/', (req, res, next)=> {
     res.json(seq);
   }, (err) => {
     console.log(err);
+    res.status(406);
     res.json(err);
   });
 });
