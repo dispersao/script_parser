@@ -10,7 +10,7 @@ cd client
 npm install
 ```
 
-Download the [fountain.js](https://github.com/pushchris/fountain) repo and unzip it on root/utils level
+Download the [fountain.js](https://github.com/pushchris/fountain) repo and unzip it on root/utils level. The folder must be called fountain-master (and not just 'fountain').
 
 Start mysql server locally and set up database
 
