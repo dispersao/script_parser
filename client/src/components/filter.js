@@ -10,12 +10,27 @@ class Filter extends Component {
     this.handleIdsChanged = this.handleIdsChanged.bind(this);
     this.handleExclusivesChanged = this.handleExclusivesChanged.bind(this);
     this.handleAndOrChanged = this.handleAndOrChanged.bind(this);
+    this.handleErrors = this.handleErrors.bind(this);
   }
 
   componentDidMount() {
     fetch(`/api/${this.props.name}`)
     .then(res => res.json())
-    .then(elements => this.setState({ elements }));
+    .then(resJson => this.handleErrors(resJson, this.componentDidMount))
+    .then(elements => this.setState({ elements }))
+    .catch(e => console.log(`componentDidMount fetch error: ${this.props.name} : ${e}`));
+  }
+  handleErrors(resJson, method) {
+    if(resJson.status && resJson.status === 'error'){
+      console.log(resJson);
+      if(resJson.errorno === 1226){
+        setTimeout(()=> method.call(this), 1500);
+      }
+      throw Error(`${resJson.code}::${resJson.errno}::${resJson.message}`);
+
+    } else {
+      return resJson;
+    }
   }
 
   handleIdsChanged(selectedElements) {
@@ -33,6 +48,7 @@ class Filter extends Component {
   }
 
   render() {
+    if(!this.state.elements) return;
     const options = this.state.elements.map(elem => {
       return {label:elem.name, value:elem.id};
     });
