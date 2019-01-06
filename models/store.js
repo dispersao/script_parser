@@ -16,7 +16,6 @@
           pool: {
             max: 5,
             min: 0,
-            acquire: 30000,
             idle: 10000
           }
         });
@@ -107,7 +106,7 @@
         this.createTables();
         return this.sequelize.sync();
       }, (err)=>{
-        return Promise.reject({status: 'error', message:'connectionError', code: err.original.errno });
+        return Promise.reject({status: 'error', message:'connectionError', errorno: err.original.errno || -1, code: err.original.code });
       });
     }
 
