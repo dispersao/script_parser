@@ -9,24 +9,23 @@ module.exports = (sequelize, DataTypes) => {
 
   Sequence.associate = (models) => {
     Sequence.belongsToMany(models.Character, {
-      foreignKey: 'sequenceId',
+      // foreignKey: 'sequenceId',
       through: models.SequenceCharacter,
     });
 
     Sequence.belongsTo(models.Location, {
-      foreignKey: 'locationId',
-      as: 'location'
+      // foreignKey: 'locationId',
+      // as: 'location'
     });
 
     Sequence.belongsTo(models.Type, {
-      foreignKey: 'typeId',
-      as: 'type'
+      // foreignKey: 'typeId',
+      // as: 'type'
     });
 
     Sequence.hasMany(models.Part, {
-      foreignKey: 'sequenceId',
-      as: 'parts'
-      // through: models.SequencePart
+      // foreignKey: 'sequenceId',
+      // as: 'parts'
     });
   };
 

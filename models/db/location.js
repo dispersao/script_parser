@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Location.associate = (models) => {
-    Location.hasMany(models.Sequence);
+    // Location.hasMany(models.Sequence);
   };
 
   Location.formatDataForStorage = (arr) => {

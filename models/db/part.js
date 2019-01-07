@@ -13,13 +13,13 @@ module.exports = (sequelize, DataTypes) => {
     Part.belongsToMany(models.Character, {
       foreignKey: 'partId',
       through: models.PartCharacter,
-      as: 'characters'
+      // as: 'characters'
     });
 
-    Part.belongsTo(models.Sequence, {
-      foreignKey: 'sequenceId',
-      as: 'sequences'
-    });
+    // Part.belongsTo(models.Sequence, {
+    //   foreignKey: 'sequenceId',
+    //   as: 'sequences'
+    // });
   };
 
   Part.formatData = (val) => {
