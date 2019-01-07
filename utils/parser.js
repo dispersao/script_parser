@@ -95,7 +95,8 @@ const includeNonDialogueCharsToScenes = (film) => {
 
 const store= (film) => {
   let db = new DB();
-  db.populateTables(film)
+  db.init()
+  .then(()=> db.populateTables(film))
   .then(()=> {
     console.log('all done');
     process.exit();
