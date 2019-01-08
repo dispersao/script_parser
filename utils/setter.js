@@ -21,7 +21,7 @@ const Setter = (()=>{
   };
 
   const updateSequence = (id, query)=>{
-    let wh = id ? {id: id} : {isEnabled: true};
+    let wh = id ? {id: id} : {hasPlayed: {[Op.ne]: null}};
     return store.db.Sequence.update(query, {'where' : wh});
   }
 
