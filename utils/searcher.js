@@ -28,6 +28,8 @@ const Searcher = (()=>{
       }
       return promise.then((list)=>{
         return list;
+      }, (err)=>{
+        return Promise.reject({status: 'error', message:'connectionError', errorno: err.original.errno || -1, code: err.original.code });
       });
     });
   };
@@ -102,6 +104,8 @@ const Searcher = (()=>{
       queries.where = Object.assign.apply(Object, [queries.where].concat(whereQueries));
       if(query.order && query.order === 'rand'){
         queries.order = Sequelize.fn('RAND');
+      } else {
+        queries.order = [['id', 'ASC']];
       }
       if(query.count && Number(query.count) === 1){
         return store.db.Sequence.findOne(queries);
