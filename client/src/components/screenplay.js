@@ -52,10 +52,13 @@ class Screenplay extends Component {
   }
 
   loadSequencesForList(filters){
-    const queryFilters = this.getFiltersFormattedForQuery(filters);
-    this.setState({'sequences': [], loading: true});
+    this.setSequencePlayed(false)
+    .then((result)=>{
+      this.setState({'sequences': [],  currentSequence: null, loading: true});
+      const queryFilters = this.getFiltersFormattedForQuery(filters);
 
-    fetch(`/api/sequences?${queryFilters}`)
+      return fetch(`/api/sequences?${queryFilters}`)
+    })
     .then(res => res.json())
     .then(resJson => this.handleErrors(resJson, this.loadSequencesForList, filters))
     .then(sequences => this.onSequencesFetched(sequences))
@@ -65,7 +68,7 @@ class Screenplay extends Component {
   generateRandomScript(filters){
     this.setSequencePlayed(false)
     .then(result => {
-      this.setState({sequences: [], currentSequence: null});
+      this.setState({sequences: [], currentSequence: null, loading: true});
       this.loadSequenceForScript(filters)
     });
   }
@@ -85,7 +88,7 @@ class Screenplay extends Component {
     .then(resJson => this.handleErrors(resJson, this.loadSequenceForScript, filters))
     .then(sequence=> this.onSequenceFetched(sequence))
     .then(resJson => this.handleErrors(resJson, this.onSequenceFetched, this.state.currentSequence))
-    .then(sequence  => this.onSequenceSettedAsPlayed(sequence))
+    .then(sequence => this.onSequenceSettedAsPlayed(sequence))
     .catch(e => console.log(`Screenplay.loadSequenceForScript fetch error: ${e}`))
 
   }
