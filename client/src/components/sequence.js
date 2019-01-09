@@ -3,7 +3,6 @@ import Part from './part';
 import _ from 'lodash';
 
 class Sequence extends Component {
-
   render() {
     let parts = _.sortBy(this.props.parts, ['index']);
     parts = parts.map((part,idx) =>{
@@ -21,15 +20,17 @@ class Sequence extends Component {
     let charactersList;
     if(this.props.reducedView){
       clas += " reduced";
-      charactersList = _.chain(this.props.parts)
-                          .map(part => part.characters)
-                          .flatten()
-                          .uniqBy('name')
-                          .map((chara, idx)=> {
-                            return <span key={idx} className="label label-default m5">{chara.name}</span>
-                          })
-                          .value();
     }
+    charactersList = _.chain(this.props.parts)
+                        .map(part => part.characters)
+                        .flatten()
+                        .uniqBy('name')
+                        .map((chara, idx)=> {
+                          const charaStyle = (chara.id -1)%6;
+                          const styles = ["primary", "default", "success", "info", "warning", "danger"];
+                          return <span key={idx} className={`label label-${styles[charaStyle]} m5`}>{chara.name}</span>
+                        })
+                        .value();
 
     return (
       <div className={clas}>
