@@ -79,14 +79,16 @@ class Filter extends Component {
 
     return (
       <div className="FilterContainer">
-        <h3 className="FilterTitle">{this.props.name}</h3>
-        <Select
-         isMulti = 'true'
-         value={this.props.selected}
-         onChange={this.handleIdsChanged}
-         options={options}
-       />
-       {extra}
+        <div className="FilterWrapper">
+          <div className="FilterTitle">{this.props.name}</div>
+            <Select
+             isMulti = 'true'
+             value={this.props.selected}
+             onChange={this.handleIdsChanged}
+             options={options}
+           />
+           {extra}
+         </div>
       </div>
     );
   }

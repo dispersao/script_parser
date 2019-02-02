@@ -32,17 +32,29 @@
 }
 
 .FiltersContainer {
-  padding: 20px;
+  padding: 0 5px;
   background: #adadad;
-  min-height: 100%;
+  /* min-height: 100%; */
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
 .FilterContainer {
-  padding-bottom: 15px;
+  /* padding-bottom: 15px; */
+  flex: 1;
+  padding: 5px;
+}
+
+.FilterWrapper{
+  
 }
 
 .FilterTitle {
-  margin: 10px;
+  margin-bottom: 5px;
+  font-size: 18px;
+  text-transform: uppercase;
 }
 
 .Submit {

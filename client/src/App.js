@@ -81,11 +81,12 @@ class App extends Component {
     });
 
     return (
-      <div className="App row">
+      <div className="App">
         <section
-          className="FiltersContainer col-sm-3">
+          className="FiltersContainer">
           {elementViews}
-
+        </section>
+        <section className="FiltersContainer">
           <label className="btn btn-default">
             <input type="checkbox"
              onChange={this.handleReduce}
@@ -105,7 +106,7 @@ class App extends Component {
             Generate Random Screenplay
           </Button>
         </section>
-        <section className="ScriptContainer col-sm-9">
+        <section className="ScriptContainer">
           <Screenplay
             filters={this.state.selectedFilters}
             onLoad={this.handleScriptLoaded}
