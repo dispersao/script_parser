@@ -1,15 +1,36 @@
 
-  const dbconfig = require('../config/dbconfig');
+  // const dbconfig = require('../config/dbconfig');
   const Sequelize = require('sequelize');
 
   class DB {
 
     constructor( config ) {
-      const dbConf = dbconfig.localhost;
-        this.sequelize = new Sequelize(dbConf.database, dbConf.user, dbConf.password, {
-        host: dbConf.server,
-        dialect: 'mysql'
-      });
+    }
+
+    connect(){
+      if(!this.sequelize){
+        const dbConf = this.getDBConfig();
+          this.sequelize = new Sequelize(dbConf.database, dbConf.user, dbConf.password, {
+          host: dbConf.server,
+          dialect: 'mysql',
+          pool: {
+            max: 5,
+            min: 0,
+            idle: 10000
+          }
+        });
+        return this.sequelize.authenticate();
+      } else {
+        return Promise.resolve(true);
+      }
+    }
+
+    testAutentication(){
+      return this.sequelize.authenticate();
+    }
+
+    closeConnection(){
+      return this.sequelize.close();
     }
 
     createTables(){
@@ -80,8 +101,13 @@
     }
 
     init(){
-      this.createTables();
-      return this.sequelize.sync();
+      return this.connect()
+      .then(()=>{
+        this.createTables();
+        return this.sequelize.sync();
+      }, (err)=>{
+        return Promise.reject({status: 'error', message:'connectionError', errorno: err.original.errno || -1, code: err.original.code });
+      });
     }
 
     createSimpleEntry(name, values){
@@ -127,5 +153,22 @@
       let len = plural ? -1 : name.length;
       return name.charAt(0).toUpperCase() + name.slice(1, len);
     }
+
+    getDBConfig(){
+      let cred = {};
+      const regex = /(\/\/)([a-zA-Z0-9]+)(\:)([a-zA-Z0-9]+)(@)([a-zA-Z0-9-._]+)(\/)([a-zA-Z0-9-._]+)(?=\?)/m;
+      console.log(`getDBConfig:${process.env.CLEARDB_DATABASE_URL}`);
+
+      let dbCred = process.env.CLEARDB_DATABASE_URL.match(regex);
+      if(dbCred && dbCred.length>=9){
+        cred.user = dbCred[2];
+        cred.password = dbCred[4];
+        cred.server = dbCred[6];
+        cred.database = dbCred[8];
+      }
+      console.log(dbCred);
+      return cred;
+    }
   }
+
 module.exports = DB;

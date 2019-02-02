@@ -1,30 +1,31 @@
 module.exports = (sequelize, DataTypes) => {
   const Sequence = sequelize.define('sequence', {
-    // content: DataTypes.TEXT,
-    isEnabled:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true }
+    // isEnabled:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+    isPlaying:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+    hasPlayed:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
   },{
     timestamps: false
   });
 
   Sequence.associate = (models) => {
     Sequence.belongsToMany(models.Character, {
-      foreignKey: 'sequenceId',
-      through: models.SequenceCharacter
+      // foreignKey: 'sequenceId',
+      through: models.SequenceCharacter,
     });
 
     Sequence.belongsTo(models.Location, {
-      foreignKey: 'locationId',
-      as: 'location'
+      // foreignKey: 'locationId',
+      // as: 'location'
     });
 
     Sequence.belongsTo(models.Type, {
-      foreignKey: 'typeId',
-      as: 'type'
+      // foreignKey: 'typeId',
+      // as: 'type'
     });
 
     Sequence.hasMany(models.Part, {
-      foreignKey: 'sequenceId',
-      // through: models.SequencePart
+      // foreignKey: 'sequenceId',
+      // as: 'parts'
     });
   };
 

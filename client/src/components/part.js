@@ -14,12 +14,14 @@ class Part extends Component {
     if(this.props.type === 'observation'){
       classes += " light";
     }
+
     return (
       <div className="partContainer">
         {partHeader && partHeader.length > 0 &&
           <h4 className="partHeader">{partHeader}</h4>
         }
         <div className={classes}>{this.props.content}</div>
+
       </div>
     )
   }

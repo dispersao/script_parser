@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Type.associate = (models) => {
-    Type.hasMany(models.Sequence);
+    // Type.hasMany(models.Sequence);
   }
 
   Type.formatDataForStorage = (arr) => {
