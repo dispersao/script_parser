@@ -1,8 +1,12 @@
+import { normalize } from 'normalizr'
+import {sequencesListSchema} from '../schema'
+
 export const SET_FILTER_IDS = 'SET_FILTER_IDS'
 export const SET_FILTER_EXCLUDE = 'SET_FILTER_EXCLUDE'
 export const SET_FILTER_AND = 'SET_FILTER_AND'
-export const REQUEST_ENTITY = 'REQUEST_ENTITY'
-export const RECEIVE_ENTITY = 'RECEIVE_ENTITY'
+export const REQUEST_SEQUENCES = 'REQUEST_SEQUENCES'
+export const RECEIVE_SEQUENCES = 'RECEIVE_SEQUENCES'
+
 
 export const setFilterIds = (name, ids) => ({
     type: SET_FILTER_IDS,
@@ -22,38 +26,39 @@ export const setFilterAnd = (name, and) => ({
     and
 })
 
-export const requestEntity = name => ({
-  type: REQUEST_ENTITY,
-  name
+export const requestSequences = () => ({
+  type: REQUEST_SEQUENCES
 })
 
-export const receiveEntity = (name, json) => ({
-  type: RECEIVE_ENTITY,
-  name,
-  items: json.data.children.map(child => child.data),
-  receiveAt: Date.now
-})
-
-const fetchEntity = name => dispatch => {
-  dispatch(requestEntity(name))
-  return fetch(`/api/${name}`)
-  .then(res => res.json())
-  .then(json => dispatch(receiveEntity(name, json)))
+export const receiveSequences = (data) => {
+  return ({
+    type: RECEIVE_SEQUENCES,
+    entities: data.entities
+  })
 }
 
-const shouldFetchEntity = (state, name) => {
-  const entityList = state.entityListByName[name]
-  if(!entityList){
+const fetchSequences = () => dispatch => {
+  dispatch(requestSequences())
+  return fetch(`/api/sequences`)
+  .then(res => res.json())
+  .then(json => {
+    return dispatch(receiveSequences(normalize(json, sequencesListSchema)))
+  })
+}
+
+const shouldFetchSequences = (state) => {
+  const seqList = state.sequences
+  if(!seqList){
     return true
   }
-  if(entityList.isFetching){
+  if(seqList.isFetching){
     return false
   }
   return true
 }
 
-export const fetchEntityIfNeeded = name => (dispatch, getState) =>{
-  if(shouldFetchEntity(getState(), name)){
-    return dispatch(fetchEntity(name))
+export const fetchSequencesifNeeded = name => (dispatch, getState) =>{
+  if(shouldFetchSequences(getState())){
+    return dispatch(fetchSequences())
   }
 }

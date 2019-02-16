@@ -1,22 +1,17 @@
 import {combineReducers} from 'redux'
+
 import {
   SET_FILTER_IDS,
   SET_FILTER_EXCLUDE,
   SET_FILTER_AND,
-  REQUEST_ENTITY,
-  RECEIVE_ENTITY
+  REQUEST_SEQUENCES,
+  RECEIVE_SEQUENCES,
 } from '../actions'
 
 const createDefaultFilter = ()=> ({
   ids:[],
   exclude:false
 })
-
-const entitiesDefault = {
-  characters: [],
-  types: [],
-  locations: []
-}
 
 const filtersDefault = {
   characters:{
@@ -26,6 +21,7 @@ const filtersDefault = {
   types: createDefaultFilter(),
   locations: createDefaultFilter()
 }
+
 
 const setSequenceFilter = (state, {ids, and, exclude}) => {
   return Object.assign({}, state, {
@@ -49,41 +45,19 @@ const sequenceFilters = (state = filtersDefault, action) => {
   }
 }
 
-const entities = (state = {
-  isFetching: false,
-  items:[]
-}, action)=> {
+
+const sequenceData = (state = {entities: {}, loading: false}, action) => {
   switch (action.type){
-    case REQUEST_ENTITY:
-      return {
-        ...state,
-        isFetching:true
-      }
-    case RECEIVE_ENTITY:
-      return {
-        ...state,
-        isFetching:false,
-        items: action.items
-      }
+    case REQUEST_SEQUENCES:
+      return { ...state, loading: true }
+    case RECEIVE_SEQUENCES:
+      return { ...state, entities: action.entities, loading: false }
     default:
       return state
   }
 }
 
-const entitiesByName = (state = entitiesDefault, action) => {
-  switch (action.type) {
-    case RECEIVE_ENTITY:
-    case REQUEST_ENTITY:
-    return {
-      ...state,
-      [action.name]: entities(state[action.name], action)
-    }
-    default:
-    return state
-  }
-}
-
 export default combineReducers({
   sequenceFilters,
-  entitiesByName
+  sequenceData
 })

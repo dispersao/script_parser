@@ -1,12 +1,14 @@
 import React from 'react'
-import SequenceFilter from '../containers/SequenceFilter'
+import SequenceFilterContainer from '../containers/SequenceFilterContainer'
 
-const SequenceFilters = ()=>(
-  <section className="FiltersContainer">
-    <SequenceFilter name='characters'></SequenceFilter>
-    <SequenceFilter name='types'></SequenceFilter>
-    <SequenceFilter name='locations'></SequenceFilter>
-  </section>
-)
+const SequenceFilters = (props)=>{
+  return (
+    <section className="FiltersContainer">
+      <SequenceFilterContainer name='characters'></SequenceFilterContainer>
+      <SequenceFilterContainer name='types'></SequenceFilterContainer>
+      <SequenceFilterContainer name='locations'></SequenceFilterContainer>
+    </section>
+  )
+}
 
 export default SequenceFilters

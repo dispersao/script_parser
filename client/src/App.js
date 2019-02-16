@@ -1,11 +1,14 @@
 import React from 'react'
-import SequenceFilters from './components/sequenceFilters'
+import { connect } from 'react-redux'
+import FullSequencesListContainer from './containers/fullSequencesListContainer'
 import './App.css'
 
-const App = () => (
-  <div>
-    <SequenceFilters />
-  </div>
-)
+const App = () => {
+  return (
+    <div>
+      <FullSequencesListContainer />
+    </div>
+  )
+}
 
-export default App;
+export default connect()(App)

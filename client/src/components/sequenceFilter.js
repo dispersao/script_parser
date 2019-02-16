@@ -1,25 +1,33 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select';
+import {fetchEntityIfNeeded} from '../actions'
 
 
-const SequenceFilter = (props) => (
-  <div className="FilterContainer">
-    <h3 className="FilterTitle">{props.name}</h3>
-      <Select
-       isMulti = 'true'
-       value={props.itemsSelected}
-       onChange={els => props.onChangeIds(els)}
-       options={props.items}
-     />
-  </div>
-)
+class SequenceFilter extends Component{
+  static propTypes = {
+    name: PropTypes.string.isRequired,
+    items: PropTypes.array.isRequired,
+    itemsSelected: PropTypes.array.isRequired,
+    onChangeIds: PropTypes.func.isRequired,
+    fetchEntities: PropTypes.func.isRequired
+  }
+  componentDidMount(){
+    // this.props.fetchEntities()
+  }
 
-SequenceFilter.propTypes = {
-  name: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
-  itemsSelected: PropTypes.array.isRequired,
-  onChangeIds: PropTypes.func.isRequired
+  render(){
+    return(
+      <div className="FilterContainer">
+        <h3 className="FilterTitle">{this.props.name}</h3>
+          <Select
+           isMulti = 'true'
+           value={this.props.itemsSelected}
+           onChange={els => this.props.onChangeIds(els)}
+           options={this.props.items}
+         />
+      </div>
+    )
+  }
 }
-
 export default SequenceFilter
