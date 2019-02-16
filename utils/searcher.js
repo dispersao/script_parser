@@ -39,14 +39,14 @@ const Searcher = (()=>{
     let promise;
     let queries = {
       where:{hasPlayed: false},
-      // attributes: { exclude: ['isPlaying', 'locationId', 'typeId', 'content'] },
+      attributes: { exclude: ['isPlaying', 'locationId', 'typeId', 'content'] },
       include: [
           {model: store.db.Location,  as: 'location'},
           {model: store.db.Type,  as: 'type'},
           {model: store.db.Part, as:'parts', attributes: [
-            'index','content', 'type', 'extra'
+            'id','index','content', 'type', 'extra'
           ], include: [
-            {model: store.db.Character, as:'characters', attributes: {exclude: ['part_character']}}
+            {model: store.db.Character, as:'characters', attributes: {include: ['name']}}
           ]}
       ]
     };
