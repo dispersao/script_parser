@@ -39,7 +39,11 @@ export const receiveSequences = (data) => {
 
 const fetchSequences = () => dispatch => {
   dispatch(requestSequences())
-  return fetch(`/api/sequences`)
+  return fetch(`/api/sequences`, {
+    headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }})
   .then(res => res.json())
   .then(json => {
     return dispatch(receiveSequences(normalize(json, sequencesListSchema)))

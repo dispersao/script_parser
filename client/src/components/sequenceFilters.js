@@ -1,5 +1,5 @@
 import React from 'react'
-import SequenceFilterContainer from '../containers/SequenceFilterContainer'
+import SequenceFilterContainer from '../containers/sequenceFilterContainer'
 
 const SequenceFilters = (props)=>{
   return (
