@@ -31,7 +31,16 @@ const sequenceFilters = (state = initialFilterState, action) => {
     case SET_FILTER_IDS:
     case SET_FILTER_EXCLUDE:
     case SET_FILTER_AND:
-      return state.mergeDeep(action.payload)
+      if(!action.payload.value.length){
+        return state.setIn([action.payload.name, action.payload.field], action.payload.value)
+      } else {
+        return state.mergeDeep({
+          [action.payload.name]: {
+            [action.payload.field]: action.payload.value
+          }
+        })
+      }
+
     default:
       return state
   }

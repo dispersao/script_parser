@@ -43,7 +43,7 @@ const getFilteredSequences = createSelector(
             let field;
             switch(filterName){
               case 'characters':
-                field = getSequenceCharacters(sequence, parts)
+                field = memoizedCharacters(sequence, parts)
                 break
               case 'locations':
                 field = [sequence.get('location')]

@@ -25,4 +25,3 @@ const sequencesListSchema = [sequenceSchema]
 const normalizeSequencesData = data => normalize(data, sequencesListSchema )
 
 export { normalizeSequencesData };
-// export { characterSchema, locationSchema, typeSchema, partSchema, sequenceSchema, sequencesListSchema };

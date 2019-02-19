@@ -10,27 +10,27 @@ export const RECEIVE_SEQUENCES = 'RECEIVE_SEQUENCES'
 export const setFilterIds = (name, ids) => ({
     type: SET_FILTER_IDS,
     payload: {
-      [name] : {
-        ids
-      }
+      name: name,
+      field: 'ids',
+      value: ids
     }
 })
 
 export const setFilterExclude = (name, exclude) => ({
     type: SET_FILTER_EXCLUDE,
     payload: {
-      [name] : {
-        exclude
-      }
+      name: name,
+      field: 'exclude',
+      value: exclude
     }
 })
 
 export const setFilterAnd = (name, and) => ({
     type: SET_FILTER_EXCLUDE,
     payload: {
-      [name] : {
-        and
-      }
+      name: name,
+      field: 'and',
+      value: and
     }
 })
 
