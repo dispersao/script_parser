@@ -10,7 +10,8 @@ const getLocations = state => state.sequenceData.getIn(['entities', 'locations']
 const getTypes = state => state.sequenceData.getIn(['entities', 'types'])
 // Select filter from state
 const getSequenceFilters = state => state.sequenceFilters;
-const getEntryItems = (state, name) => state.sequenceData.getIn(['entities', name])
+const getEntryListByname = (state, name) => state.sequenceData.getIn(['entities', name])
+const getSequenceFilterByName = (state, name) => state.sequenceFilters.get(name)
 
 const getSequenceCharacters = (sequence, parts) => {
   let chars = sequence.get('parts').map(pid => parts.get(pid.toString()).get('characters'))
@@ -33,7 +34,6 @@ const getFilteredSequences = createSelector(
   getSequenceFilters,
   ( result, sequences, parts, characters, locations, types, filters) => {
     if (!result || result.size === 0) return null;
-
     return (
       result
         .filter((seqId) => {
@@ -90,4 +90,4 @@ const filterField =  (filter, field) => {
   return shouldInclude
 }
 
-export { getCharacters, getLocations, getParts, getFilteredSequences, getSequenceFilters, getEntryItems };
+export { getCharacters, getLocations, getParts, getFilteredSequences, getSequenceFilterByName, getEntryListByname };

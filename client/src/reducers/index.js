@@ -37,7 +37,6 @@ const sequenceFilters = (state = initialFilterState, action) => {
           [action.payload.field]: action.payload.value
         }
       })
-
     default:
       return state
   }

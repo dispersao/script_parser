@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {setFilterIds, setFilterExclude, setFilterAnd} from '../actions'
-import {getEntryItems, getSequenceFilters} from '../selectors'
+import {getEntryListByname, getSequenceFilterByName} from '../selectors'
 import SequenceFilterIds from './sequenceFilterIds'
 import SequenceFilterBoolean from './sequenceFilterBoolean'
 
@@ -32,8 +32,8 @@ const SequenceFilter = (props) => {
 
 const mapStateToProps = (state, ownProps) => {
   return ({
-    items: getEntryItems(state, ownProps.name),
-    filter: getSequenceFilters(state).get(ownProps.name)
+    items: getEntryListByname(state, ownProps.name),
+    filter: getSequenceFilterByName(state, ownProps.name)
   })
 }
 
