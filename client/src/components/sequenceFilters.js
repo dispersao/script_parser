@@ -4,9 +4,9 @@ import SequenceFilter from './sequenceFilter'
 const SequenceFilters = (props)=>{
   return (
     <section className="FiltersContainer">
-      <SequenceFilter name='characters'></SequenceFilter>
-      <SequenceFilter name='types'></SequenceFilter>
-      <SequenceFilter name='locations'></SequenceFilter>
+      <SequenceFilter name='characters' key={1}></SequenceFilter>
+      <SequenceFilter name='types' key={2}></SequenceFilter>
+      <SequenceFilter name='locations' key={3}></SequenceFilter>
     </section>
   )
 }
