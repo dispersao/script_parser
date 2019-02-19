@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {setFilterIds, setFilterExclude} from '../actions'
+import {setFilterIds, setFilterExclude, setFilterAnd} from '../actions'
 import {getEntryItems, getSequenceFilters} from '../selectors'
 import SequenceFilterIds from './sequenceFilterIds'
 import SequenceFilterBoolean from './sequenceFilterBoolean'
@@ -18,6 +18,12 @@ const SequenceFilter = (props) => {
               filter={props.filter}
               field="exclude"
               onChange={props.onChangeExclude} />
+              { filter.keySeq().includes('and') && filter.get('ids').size > 1 &&
+                <SequenceFilterBoolean
+                  filter={props.filter}
+                  field="and"
+                  onChange={props.onChangeAnd} />
+              }
           </div>
         }
     </div>
@@ -37,6 +43,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   onChangeExclude: (exclude) =>{
     dispatch(setFilterExclude(ownProps.name, exclude))
+  },
+  onChangeAnd: (and)=>{
+    dispatch(setFilterAnd(ownProps.name, and))
   }
 })
 

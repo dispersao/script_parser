@@ -28,7 +28,7 @@ const initialFilterState = fromJS(filtersDefault);
 const sequenceFilters = (state = initialFilterState, action) => {
   switch(action.type){
     case SET_FILTER_IDS:
-      const idsList = new List(action.payload.value)
+      const idsList = List(action.payload.value)
       return state.setIn([action.payload.name, action.payload.field], idsList)
     case SET_FILTER_EXCLUDE:
     case SET_FILTER_AND:

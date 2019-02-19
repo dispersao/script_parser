@@ -70,9 +70,9 @@ const getFilteredSequences = createSelector(
           });
           return seqResultItemMap;
         })
-      );
-  },
-);
+      )
+  }
+)
 
 const filterField =  (filter, field) => {
   const filterIds = filter.get('ids')
