@@ -4,6 +4,7 @@ import SequenceFilters from './sequenceFilters'
 import {connect} from 'react-redux'
 import {fetchSequencesifNeeded} from '../actions'
 import {getFilteredSequences} from '../selectors'
+import {toJS} from '../utils/immutableToJS'
 
 
 class FullSequencesList extends Component{
@@ -32,4 +33,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FullSequencesList)
+)(toJS(FullSequencesList))

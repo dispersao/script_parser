@@ -1,16 +1,16 @@
 import React from 'react';
 
-const Part = ({part}) => {
+const Part = ({type, name, characters, extra, content}) => {
   let partHeader = '';
-  if(part.get('type') === 'dialogue'){
-    partHeader += part.get('characters').first().get('name')
+  if(type === 'dialogue'){
+    partHeader += characters[0].name
   }
-  if(part.get('extra')){
-    partHeader += ` ${part.get('extra')}`
+  if(extra){
+    partHeader += ` ${extra}`
   }
 
   let classes = "partContent";
-  if(part.get('type') === 'observation'){
+  if(type === 'observation'){
     classes += " light";
   }
 
@@ -19,7 +19,7 @@ const Part = ({part}) => {
       {partHeader && partHeader.length > 0 &&
         <h4 className="partHeader">{partHeader}</h4>
       }
-      <div className={classes}>{part.get('content')}</div>
+      <div className={classes}>{content}</div>
     </div>
   )
 }

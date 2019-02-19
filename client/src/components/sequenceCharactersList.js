@@ -3,8 +3,8 @@ import SequenceCharacter from './sequenceCharacter'
 
 const CharactersList = ({characters})=>(
   <div className="charactersList light">
-    {characters.map((val,index)=>(
-      <SequenceCharacter key={index} character={val}></SequenceCharacter>
+    {characters.map((character,index)=>(
+      <SequenceCharacter key={index} {...character}></SequenceCharacter>
     ))}
   </div>
 )

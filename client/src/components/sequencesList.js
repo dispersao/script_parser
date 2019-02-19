@@ -5,7 +5,7 @@ const SequencesList = ({sequences}) =>{
   return(
     <div className="Screenplay">
       {sequences && sequences.map((seq, index)=>(
-        <Sequence key={index} sequence={seq}></Sequence>
+        <Sequence key={index} {...seq}></Sequence>
       ))}
     </div>
   )

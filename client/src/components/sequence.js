@@ -2,21 +2,21 @@ import React from 'react'
 import SequenceCharactersList from './sequenceCharactersList'
 import PartsList from './partsList'
 
-const Sequence = ({sequence}) => {
+const Sequence = ({type, location, id, characters, parts}) => {
   let clas= "SequenceContainer";
   if(true){
     clas += " reduced";
   }
   return (
     <div className={clas}>
-      <h3 className="SequenceTitle">{sequence.getIn(['type', 'name'])} - {sequence.getIn(['location', 'name'])} <span className="light">#{sequence.get('id')}</span></h3>
-      {sequence.get('characters') && sequence.get('characters').size > 0 &&
+      <h3 className="SequenceTitle">{type.name} - {location.name} <span className="light">#{id}</span></h3>
+      {characters && characters.length > 0 &&
         <div className="charactersList light">
-          <SequenceCharactersList characters={sequence.get('characters')} />
+          <SequenceCharactersList characters={characters} />
         </div>
       }
       <div className="partsContanier">
-        <PartsList parts={sequence.get('parts')} />
+        <PartsList parts={parts} />
       </div>
     </div>
   )
