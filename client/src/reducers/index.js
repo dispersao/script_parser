@@ -1,4 +1,6 @@
 import {combineReducers} from 'redux'
+import { fromJS } from 'immutable';
+
 
 import {
   SET_FILTER_IDS,
@@ -22,36 +24,28 @@ const filtersDefault = {
   locations: createDefaultFilter()
 }
 
+const initialFilterState = fromJS(filtersDefault);
 
-const setSequenceFilter = (state, {ids, and, exclude}) => {
-  return Object.assign({}, state, {
-    ids,
-    and,
-    exclude
-  })
-}
-
-const sequenceFilters = (state = filtersDefault, action) => {
+const sequenceFilters = (state = initialFilterState, action) => {
   switch(action.type){
     case SET_FILTER_IDS:
     case SET_FILTER_EXCLUDE:
     case SET_FILTER_AND:
-    return {
-      ...state,
-      [action.name]: setSequenceFilter(state[action.name], action)
-      }
+      return state.mergeDeep(action.payload)
     default:
       return state
   }
 }
 
+const initialSequencesState = fromJS({entities: {}, loading: false});
 
-const sequenceData = (state = {entities: {}, loading: false}, action) => {
+const sequenceData = (state = initialSequencesState, action) => {
   switch (action.type){
     case REQUEST_SEQUENCES:
-      return { ...state, loading: true }
+      return state.set('loading', true)
     case RECEIVE_SEQUENCES:
-      return { ...state, entities: action.entities, loading: false }
+    let newState = state.set('loading', false)
+     return newState.mergeDeep(action.payload)
     default:
       return state
   }

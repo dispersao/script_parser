@@ -1,5 +1,4 @@
-import { normalize } from 'normalizr'
-import {sequencesListSchema} from '../schema'
+import {normalizeSequencesData} from '../schema'
 
 export const SET_FILTER_IDS = 'SET_FILTER_IDS'
 export const SET_FILTER_EXCLUDE = 'SET_FILTER_EXCLUDE'
@@ -10,20 +9,29 @@ export const RECEIVE_SEQUENCES = 'RECEIVE_SEQUENCES'
 
 export const setFilterIds = (name, ids) => ({
     type: SET_FILTER_IDS,
-    name,
-    ids
+    payload: {
+      [name] : {
+        ids
+      }
+    }
 })
 
 export const setFilterExclude = (name, exclude) => ({
     type: SET_FILTER_EXCLUDE,
-    name,
-    exclude
+    payload: {
+      [name] : {
+        exclude
+      }
+    }
 })
 
 export const setFilterAnd = (name, and) => ({
     type: SET_FILTER_EXCLUDE,
-    name,
-    and
+    payload: {
+      [name] : {
+        and
+      }
+    }
 })
 
 export const requestSequences = () => ({
@@ -33,7 +41,7 @@ export const requestSequences = () => ({
 export const receiveSequences = (data) => {
   return ({
     type: RECEIVE_SEQUENCES,
-    entities: data.entities
+    payload: data
   })
 }
 
@@ -46,7 +54,7 @@ const fetchSequences = () => dispatch => {
   }})
   .then(res => res.json())
   .then(json => {
-    return dispatch(receiveSequences(normalize(json, sequencesListSchema)))
+    return dispatch(receiveSequences(normalizeSequencesData(json)))
   })
 }
 

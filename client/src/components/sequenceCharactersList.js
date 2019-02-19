@@ -1,10 +1,10 @@
 import React from 'react'
-import Character from '../containers/characterContainer'
+import SequenceCharacter from './sequenceCharacter'
 
 const CharactersList = ({characters})=>(
   <div className="charactersList light">
     {characters.map((val,index)=>(
-      <Character key={index} characterId={val}></Character>
+      <SequenceCharacter key={index} character={val}></SequenceCharacter>
     ))}
   </div>
 )

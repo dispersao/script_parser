@@ -1,27 +1,25 @@
 import React from 'react'
-import CharactersList from './charactersList'
+import SequenceCharactersList from './sequenceCharactersList'
 import PartsList from './partsList'
-// import Part from './part';
-// import _ from 'lodash';
 
-const Sequence = ({type, location, reducedView, id, characters, parts}) => {
+const Sequence = ({sequence}) => {
   let clas= "SequenceContainer";
-  if(reducedView){
+  if(true){
     clas += " reduced";
   }
   return (
     <div className={clas}>
-      <h3 className="SequenceTitle">{type} - {location} <span className="light">#{id}</span></h3>
-      {characters && characters.length > 0 &&
+      <h3 className="SequenceTitle">{sequence.getIn(['type', 'name'])} - {sequence.getIn(['location', 'name'])} <span className="light">#{sequence.get('id')}</span></h3>
+      {sequence.get('characters') && sequence.get('characters').size > 0 &&
         <div className="charactersList light">
-          <CharactersList characters={characters} />
+          <SequenceCharactersList characters={sequence.get('characters')} />
         </div>
       }
       <div className="partsContanier">
-        <PartsList parts={parts} />
+        <PartsList parts={sequence.get('parts')} />
       </div>
     </div>
   )
 }
 
-export default Sequence;
+export default Sequence

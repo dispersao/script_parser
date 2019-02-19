@@ -1,4 +1,5 @@
 import { schema } from 'normalizr';
+import { normalize } from 'normalizr'
 
 // Define a users schema
 const characterSchema = new schema.Entity('characters');
@@ -21,4 +22,7 @@ const sequenceSchema = new schema.Entity('sequences', {
 
 const sequencesListSchema = [sequenceSchema]
 
-export { characterSchema, locationSchema, typeSchema, partSchema, sequenceSchema, sequencesListSchema };
+const normalizeSequencesData = data => normalize(data, sequencesListSchema )
+
+export { normalizeSequencesData };
+// export { characterSchema, locationSchema, typeSchema, partSchema, sequenceSchema, sequencesListSchema };

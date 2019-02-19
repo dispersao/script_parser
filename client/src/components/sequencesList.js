@@ -1,11 +1,11 @@
 import React from 'react'
-import Sequence from '../containers/sequenceContainer'
+import Sequence from './sequence'
 
 const SequencesList = ({sequences}) =>{
   return(
     <div className="Screenplay">
-      {Object.keys(sequences).map((key,index)=>(
-        <Sequence key={index} sequenceId={key}></Sequence>
+      {sequences && sequences.map((seq, index)=>(
+        <Sequence key={index} sequence={seq}></Sequence>
       ))}
     </div>
   )

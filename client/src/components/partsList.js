@@ -1,10 +1,10 @@
 import React from 'react'
-import Part from '../containers/partContainer'
+import Part from './part'
 
 const PartList = ({parts}) => (
   <div className="partsContanier">
-  {parts.map((val,index)=>(
-    <Part key={index} partId={val}></Part>
+  {parts.map((part,index)=>(
+    <Part key={index} part={part}></Part>
   ))}
   </div>
 )
