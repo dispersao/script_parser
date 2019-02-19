@@ -1,43 +1,28 @@
 import React from 'react'
-import {List} from 'immutable'
 import {connect} from 'react-redux'
 import {setFilterIds, setFilterExclude} from '../actions'
 import {getEntryItems, getSequenceFilters} from '../selectors'
+import SequenceFilterIds from './sequenceFilterIds'
+import SequenceFilterBoolean from './sequenceFilterBoolean'
 
-import Select from 'react-select'
 
-const SequenceFilter = ({name, filter, items, onChangeIds, onChangeExclude}) => {
+const SequenceFilter = (props) => {
+  const filter = props.filter
   return (
     <div className="FilterContainer">
-      <h3 className="FilterTitle">{name}</h3>
-        <Select
-         isMulti = 'true'
-         value={idsToOption(items, filter.get('ids'))}
-         onChange={els => onChangeIds(els.map(el => el.value))}
-         options={itemsToOptions(items)}
-       />
+      <h3 className="FilterTitle">{props.name}</h3>
+        <SequenceFilterIds {...props} />
+        { filter.get('ids') && filter.get('ids').size > 0 &&
+          <div className="btn-group">
+            <SequenceFilterBoolean
+              filter={props.filter}
+              field="exclude"
+              onChange={props.onChangeExclude} />
+          </div>
+        }
     </div>
   )
 }
-
-const idsToOption = (items, ids) => {
-  if(ids && ids.size){
-    return ids.map(id => {
-       return itemToOption(items.get(id.toString()))
-    }).toArray()
-  }
-}
-
-const itemsToOptions = (items) => {
-  if(items && items.size){
-    return items.map(itemToOption).toArray()
-  }
-}
-
-const itemToOption = (item) => ({
-  label: item.get('name'),
-  value: item.get('id')
-})
 
 const mapStateToProps = (state, ownProps) => {
   return ({

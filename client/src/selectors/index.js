@@ -84,7 +84,7 @@ const filterField =  (filter, field) => {
   } else {
     shouldInclude = filterIds.some(id => field.includes(id))
   }
-  if(filter.get('exclusive')){
+  if(filter.get('exclude')){
     shouldInclude = !shouldInclude
   }
   return shouldInclude
