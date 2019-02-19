@@ -7,7 +7,7 @@ const SequenceFilterBoolean = ({filter, field, onChange}) => {
         type="checkbox"
         name={field} id={field}
         value="true"
-        checked ={filter.get(field)}
+        checked ={filter[field]}
         onChange={ev => onChange(ev.currentTarget.checked)}/>
       {field}
     </label>

@@ -4,6 +4,7 @@ import {setFilterIds, setFilterExclude, setFilterAnd} from '../actions'
 import {getEntryListByname, getSequenceFilterByName} from '../selectors'
 import SequenceFilterIds from './sequenceFilterIds'
 import SequenceFilterBoolean from './sequenceFilterBoolean'
+import {toJS} from '../utils/immutableToJS'
 
 
 const SequenceFilter = (props) => {
@@ -12,15 +13,15 @@ const SequenceFilter = (props) => {
     <div className="FilterContainer">
       <h3 className="FilterTitle">{props.name}</h3>
         <SequenceFilterIds {...props} />
-        { filter.get('ids') && filter.get('ids').size > 0 &&
+        { filter.ids && filter.ids.length > 0 &&
           <div className="btn-group">
             <SequenceFilterBoolean
-              filter={props.filter}
+              filter={filter}
               field="exclude"
               onChange={props.onChangeExclude} />
-              { filter.keySeq().includes('and') && filter.get('ids').size > 1 &&
+              { Object.keys(filter).includes('and') && filter.ids.length > 1 &&
                 <SequenceFilterBoolean
-                  filter={props.filter}
+                  filter={filter}
                   field="and"
                   onChange={props.onChangeAnd} />
               }
@@ -52,4 +53,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SequenceFilter)
+)(toJS(SequenceFilter))
