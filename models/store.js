@@ -39,13 +39,17 @@
         Location: this.sequelize.import('./db/location'),
         Sequence: this.sequelize.import('./db/sequence'),
         Type: this.sequelize.import('./db/type'),
+        ScriptSequence: this.sequelize.import('./db/scriptSequence'),
         Part: this.sequelize.import('./db/part'),
+        Script: this.sequelize.import('./db/script'),
         SequenceCharacter: this.sequelize.import('./db/sequenceCharacter'),
-        PartCharacter: this.sequelize.import('./db/partCharacter'),
+        PartCharacter: this.sequelize.import('./db/partCharacter')
       };
 
       Object.keys(this.db).forEach((modelName) => {
+        console.log(modelName);
         if ('associate' in this.db[modelName]) {
+          console.log('associating: '+modelName)
           this.db[modelName].associate(this.db);
         }
       });
