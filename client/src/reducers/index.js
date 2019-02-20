@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux'
-import { fromJS, List, Map } from 'immutable'
+import { fromJS, List } from 'immutable'
 
 import {
   SET_FILTER_IDS,
