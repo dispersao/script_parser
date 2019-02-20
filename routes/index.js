@@ -48,6 +48,16 @@ router.get('/', (req, res, next)=> {
     res.json(err);
   });
 })
+.get('/scripts', (req, res, next)=> {
+  searcher.search('scripts',req.query)
+  .then((list) => {
+    res.json(list);
+  }, (err) => {
+    console.log(err);
+    res.status(406);
+    res.json(err);
+  });
+})
 .post('/sequences', (req, res, next)=> {
   setter.update('sequence', null, req.body)
   .then((seq) => {
