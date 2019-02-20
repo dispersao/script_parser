@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import reducer from './reducers'
-import App from './App'
+import Root from './router'
 
 const middleware = [ thunkMiddleware ]
 if (process.env.NODE_ENV !== 'production') {
@@ -18,8 +18,6 @@ const store = createStore(
 )
 
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <Root store={store} />,
   document.getElementById('root')
 )
