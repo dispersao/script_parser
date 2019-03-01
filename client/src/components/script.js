@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import FullSequencesList from './fullSequencesList'
+import ScriptHeader from './scriptHeader'
+import SequencesList from './sequencesList'
 import {connect} from 'react-redux'
 import {toJS} from '../utils/immutableToJS'
 import {fetchScriptsIfNeeded, fetchSequencesifNeeded} from '../actions'
@@ -15,15 +17,15 @@ class Script extends Component {
   render(){
     return (
       <div className="scriptEditor">
-        <div className="scriptHeaderContainer">
-          SCRIPT HEADER
-        </div>
+        <ScriptHeader {...this.props.script} />
         <div className="scriptEditorSequencesContainer">
           <section className="sequencePicker">
             <FullSequencesList />
           </section>
           <section className="scriptContainer">
-            SCRIPT CONTAINER
+            {this.props.script && this.props.script.sequences.length &&
+              <SequencesList sequences={this.props.script.sequences} />
+            }
           </section>
         </div>
       </div>
