@@ -2,13 +2,14 @@ import React from 'react'
 import {Jumbotron} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 
-const ScriptHeader = ({name, author }) => {
+const ScriptHeader = ({name, author, id }) => {
   return (
     <Jumbotron className="ScriptHeaderView">
-      <h3>{name}</h3>
-      <div className="ScriptHeaderViewAuthorContainer">
-        <p className="">{author}</p>
+      <div className="content">
+        <h3>{name}</h3>
+        <div>{author}</div>
       </div>
+      <Link to={`${id}/edit`}>Edit</Link>
     </Jumbotron>
   )
 }

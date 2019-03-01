@@ -12,9 +12,7 @@ const Root = ({ store }) => (
         <Route exact={true} path="/" component={Home} />
         <Route exact={true} path="/new" component={ScriptView} />
         <Route exact={true} path="/:id/edit" component={ScriptView} />
-        <Route exact={true} path="/:id" render={({match:{params}})=> (
-          <h1> VIEW SCRIPT {params.id}</h1>
-        )} />
+        <Route exact={true} path="/:id" component={ScriptView} />
       </div>
     </Router>
   </Provider>

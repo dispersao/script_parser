@@ -65,7 +65,7 @@
 }
 
 .SequenceContainer {
-  padding: 30px;
+  padding: 0 30px;
 }
 
 .partContainer {
@@ -115,6 +115,14 @@
   min-width: 400px;
 }
 
+.scriptView {
+  max-width: 800px;
+  margin: auto;
+}
+
 .ScriptHeaderView {
-  padding: 4rem 2rem;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
