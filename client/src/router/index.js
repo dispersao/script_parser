@@ -2,18 +2,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import App from '../components/app'
+import Script from '../components/script'
+import Home from '../components/home'
 
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router>
       <div>
-        <Route exact={true} path="/" render={() => (
-          <h1>HOME</h1>
-        )} />
-        <Route exact={true} path="/new" component={App} />
-        <Route exact={true} path="/:id/edit" render={({match:{params}})=> (
-          <h1> EDIT SCRIPT {params.id}</h1>
+        <Route exact={true} path="/" component={Home} />
+        <Route exact={true} path="/new" component={Script} />
+        <Route exact={true} path="/:id/edit" component={Script} />
+        <Route exact={true} path="/:id" render={({match:{params}})=> (
+          <h1> VIEW SCRIPT {params.id}</h1>
         )} />
       </div>
     </Router>
