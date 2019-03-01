@@ -5,7 +5,7 @@ const getScript = (store, query)=>{
 
   let queries = {
     include: [
-        { model: store.db.ScriptSequence, attributes: 
+        { model: store.db.ScriptSequence,  as:'scriptSequences', attributes: 
           { exclude:
             ['createdAt', 'updatedAt']
           }
