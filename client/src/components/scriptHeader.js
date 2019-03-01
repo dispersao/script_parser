@@ -9,7 +9,7 @@ const ScriptHeader = ({name, author, id }) => {
         <h3>{name}</h3>
         <div>{author}</div>
       </div>
-      <Link to={`${id}/edit`}>Edit</Link>
+      <Link to="edit">Edit</Link>
     </Jumbotron>
   )
 }

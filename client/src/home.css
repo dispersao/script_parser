@@ -31,10 +31,14 @@
   }
 }
 
+.Home {
+  max-width: 800px;
+  margin: auto;
+}
+
 .ScriptCardContainer {
   background: #efefef;
   padding: 15px;
-  max-width: 600px;
   display: block;
   cursor: pointer;
 }
