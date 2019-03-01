@@ -1,9 +1,13 @@
 import React from 'react'
 import Sequence from './sequence'
 
-const SequencesList = ({sequences}) =>{
+const SequencesList = ({sequences, reduced}) =>{
+  let clas = "Screenplay"
+  if(reduced){
+    clas += " reduced";
+  }
   return(
-    <div className="Screenplay">
+    <div className={clas}>
       {sequences && sequences.map((seq, index)=>(
         <Sequence key={index} {...seq}></Sequence>
       ))}

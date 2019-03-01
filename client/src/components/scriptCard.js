@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-const ScriptCard = ({name, script_sequences, id, author}) => {
+const ScriptCard = ({name, scriptSequences, id, author}) => {
   return (
     <div className="ScriptCardContainer">
       <h3 className="ScriptCardTile">{name}</h3>
@@ -11,7 +11,7 @@ const ScriptCard = ({name, script_sequences, id, author}) => {
           <span className="label label-default">{author}</span>
         </div>
         <div className="ScriptCardSequenceCount">
-          <span>{script_sequences.length} {script_sequences.length === 1 ? 'sequence' : 'sequences'}</span>
+          <span>{scriptSequences.length} {scriptSequences.length === 1 ? 'sequence' : 'sequences'}</span>
         </div>
       </div>
     </div>

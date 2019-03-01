@@ -88,7 +88,7 @@
   margin-bottom: 10px;
 }
 
-.SequenceContainer.reduced {
+.reduced .SequenceContainer {
   background: #efefef;
   padding: 20px;
   max-height: 350px;
@@ -101,15 +101,20 @@
   float: left;
 }
 
-.scriptEditorSequencesContainer{
+.scriptEditorSequencesContainer {
   display: flex;
 }
 
-.sequencePicker{
+.sequencePicker {
   flex: 1;
   min-width: 200px;
 }
-.scriptContainer{
+
+.scriptContainer {
   flex: 2;
-  min-width:400px;
+  min-width: 400px;
+}
+
+.ScriptHeaderView {
+  padding: 4rem 2rem;
 }

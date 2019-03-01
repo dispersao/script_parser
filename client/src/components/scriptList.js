@@ -5,6 +5,7 @@ import {fetchScriptsIfNeeded} from '../actions'
 import {getScripts} from '../selectors'
 import ScriptCard from './scriptCard'
 import {Link} from 'react-router-dom'
+import {ListGroup} from 'react-bootstrap'
 
 
 class ScriptListContainer extends Component{
@@ -15,13 +16,15 @@ class ScriptListContainer extends Component{
 
   render(){
     return (
-      <div className="ScriptListContainer">
+      <ListGroup>
         { this.props.scripts && Object.keys(this.props.scripts).map((index) => (
+          <ListGroup.Item>
           <Link key={index} to={`${index}/edit`}>
             <ScriptCard key={index} {...this.props.scripts[index]} onClick={this.props.onClick} />
           </Link>
+          </ListGroup.Item>
         ))}
-      </div>
+      </ListGroup>
     )
   }
 }

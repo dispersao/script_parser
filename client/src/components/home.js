@@ -6,6 +6,7 @@ const Home = () => {
 
   return (
     <div className="Home">
+      <h1>List of Scripts</h1>
       <ScriptList />
     </div>
   )

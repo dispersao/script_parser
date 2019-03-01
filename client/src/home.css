@@ -34,8 +34,7 @@
 .ScriptCardContainer {
   background: #efefef;
   padding: 15px;
-  max-width: 320px;
-  width: 320px;
+  max-width: 600px;
   display: block;
   cursor: pointer;
 }

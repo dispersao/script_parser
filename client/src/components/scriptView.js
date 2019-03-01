@@ -6,25 +6,31 @@ import {connect} from 'react-redux'
 import {toJS} from '../utils/immutableToJS'
 import {fetchScriptsIfNeeded, fetchSequencesifNeeded} from '../actions'
 import {makeGetScriptFormatted} from '../selectors'
+import {Link} from 'react-router-dom'
+import {Nav} from 'react-bootstrap'
+
 
 import '../app.css'
 
-class Script extends Component {
+class ScriptView extends Component {
   componentDidMount(){
     this.props.fetchScripts()
     this.props.fetchSequences()
   }
   render(){
     return (
-      <div className="scriptEditor">
+      <div className="scriptView">
+        <Nav>
+          <Link to="/">Home</Link>
+        </Nav>
         <ScriptHeader {...this.props.script} />
         <div className="scriptEditorSequencesContainer">
-          <section className="sequencePicker">
+          {/*<section className="sequencePicker">
             <FullSequencesList />
-          </section>
+          </section>*/}
           <section className="scriptContainer">
             {this.props.script && this.props.script.sequences.length &&
-              <SequencesList sequences={this.props.script.sequences} />
+              <SequencesList sequences={this.props.script.sequences} reduced={false} />
             }
           </section>
         </div>
@@ -50,18 +56,6 @@ const makeMapStateToProps = () => {
   return mapStateToProps
 }
 
-// const mapStateToProps = (state, ownProps) => {
-//   let script
-//   if(ownProps.match.props.id) {
-//     script = getScripts(state).get(ownProps.match.props.id)
-//   } else {
-//     script =
-//   }
-//   return{
-//     script:script
-//   }
-// }
-
 const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchScripts: ()=>dispatch(fetchScriptsIfNeeded()),
   fetchSequences: ()=>dispatch(fetchSequencesifNeeded())
@@ -70,4 +64,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 export default connect(
   makeMapStateToProps,
   mapDispatchToProps
-)(toJS(Script))
+)(toJS(ScriptView))
