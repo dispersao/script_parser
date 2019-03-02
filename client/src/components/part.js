@@ -17,7 +17,7 @@ const Part = ({type, name, characters, extra, content}) => {
   return (
     <div className="partContainer">
       {partHeader && partHeader.length > 0 &&
-        <h4 className="partHeader">{partHeader}</h4>
+        <div className="partHeader">{partHeader}</div>
       }
       <div className={classes}>{content}</div>
     </div>

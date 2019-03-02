@@ -7,7 +7,7 @@ const Sequence = ({type, location, id, characters, parts}) => {
 
   return (
     <div className={clas}>
-      <h3 className="SequenceTitle">{type.name} - {location.name} <span className="light">#{id}</span></h3>
+      <div className="SequenceTitle">{type.name} - {location.name} <span className="light">#{id}</span></div>
       {characters && characters.length > 0 &&
         <div className="charactersList light">
           <SequenceCharactersList characters={characters} />
