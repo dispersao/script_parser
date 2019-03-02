@@ -7,8 +7,9 @@ const getParts = state => state.sequenceData.get('parts')
 const getCharacters = state => state.sequenceData.get('characters')
 const getLocations = state => state.sequenceData.get('locations')
 const getTypes = state => state.sequenceData.get('types')
+
 const getScripts = state => state.scriptData.get('scripts')
-const getScript = (state, props) => getScripts(state) && getScripts(state).get(props.id)
+const getCurrentScriptId = (state) => state.scriptData.get('currentScript')
 const getScriptSequences = state => state.scriptData.get('scriptSequences')
 
 // Select filter from state
@@ -63,17 +64,20 @@ const getFilteredSequences = createSelector(
   }
 )
 
-const makeGetScriptFormatted = () => {
-  return createSelector(
-    getScript,
+// const makeGetScriptFormatted = () => {
+  // return createSelector(
+const getCurrentScriptFormatted = createSelector(
+    getCurrentScriptId,
+    getScripts,
     getScriptSequences,
     getSequences,
     getParts,
     getCharacters,
     getLocations,
     getTypes,
-    (script, scriptSequences, sequences, parts, characters, locations, types) => {
-      if(!script || !sequences || sequences.size === 0) return null
+    (scriptId, scripts, scriptSequences, sequences, parts, characters, locations, types) => {
+      if(!scriptId || !scripts || !sequences || sequences.size === 0) return null
+      const script = scripts.get(scriptId.toString())
       return Map({
         name: script.get('name'),
         id: script.get('id'),
@@ -87,7 +91,7 @@ const makeGetScriptFormatted = () => {
       })
     }
   )
-}
+// }
 
 const mountSequence = (sequence, types, locations, parts, characters) => {
   return Map({
@@ -121,4 +125,4 @@ const filterField =  (filter, field) => {
   return shouldInclude
 }
 
-export { getCharacters, getLocations, getParts, getFilteredSequences, getSequenceFilterByName, getEntryListByname, getScripts , getSequences, makeGetScriptFormatted};
+export { getCharacters, getLocations, getParts, getFilteredSequences, getSequenceFilterByName, getEntryListByname, getScripts , getSequences, getCurrentScriptFormatted};

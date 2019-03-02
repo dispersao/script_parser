@@ -53,3 +53,9 @@ export const fetchScriptsIfNeeded = name => (dispatch, getState) =>{
     return dispatch(fetchScripts())
   }
 }
+
+export const setCurrentScriptId = id => (dispatch,getState)=>{
+  if(id){
+    return dispatch(setCurrentScript(id))
+  }
+}

@@ -5,7 +5,7 @@ import {InputGroup, FormControl, Button} from 'react-bootstrap'
 import {fetchScriptsIfNeeded, fetchSequencesifNeeded} from '../actions'
 
 
-const ScriptName = ({name, id, saveName}) => {
+const ScriptAuthor = ({author, id, saveName}) => {
   const [edit, setEdit] = useState(false)
 
   return (
@@ -13,10 +13,10 @@ const ScriptName = ({name, id, saveName}) => {
         { edit &&
           <InputGroup className="mb-3">
             <FormControl
-             placeholder="Script's name"
-             aria-label="Script's name"
+             placeholder="Script's author"
+             aria-label="Script's author"
              aria-describedby="basic-addon2"
-             defaultValue={name}
+             defaultValue={author}
             />
             <InputGroup.Append>
               <Button
@@ -35,7 +35,7 @@ const ScriptName = ({name, id, saveName}) => {
             </InputGroup>
         }
         {!edit &&
-          <h3 onClick={()=> setEdit(true)}>{name}</h3>
+          <div onClick={()=> setEdit(true)}>{author}</div>
         }
       </div>
   )
@@ -54,4 +54,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(ScriptName))
+)(toJS(ScriptAuthor))

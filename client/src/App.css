@@ -91,14 +91,15 @@
 .reduced .SequenceContainer {
   background: #efefef;
   padding: 20px;
-  max-height: 350px;
-  max-width: 320px;
-  width: 320px;
   display: block;
-  height: 350px;
+  height: 400px;
   overflow: auto;
   margin: 5px;
   float: left;
+}
+
+.sequencePicker .reduced .SequenceContainer {
+  max-height: 300px;
 }
 
 .scriptEditorSequencesContainer {
@@ -122,19 +123,8 @@
 
 .ScriptHeaderView {
   padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
 }
 
 .ScriptName {
-  width: 100%;
-}
-
-.input-group {
-  position: relative;
-  display: -ms-flexbox;
-  display: flex;
-  align-items: stretch;
   width: 100%;
 }
