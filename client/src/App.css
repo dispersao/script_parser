@@ -126,3 +126,15 @@
   justify-content: space-between;
   align-items: flex-end;
 }
+
+.ScriptName {
+  width: 100%;
+}
+
+.input-group {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
