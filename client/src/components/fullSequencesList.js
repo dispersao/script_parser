@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import SequencesList from './sequencesList'
+import DraggableSequencesList from './draggableSequenceList'
 import SequenceFilters from './sequenceFilters'
 import {connect} from 'react-redux'
 import {fetchSequencesifNeeded} from '../actions'
@@ -15,7 +15,8 @@ class FullSequencesList extends Component{
     return (
       <div className="ScreenplayContainer">
         <SequenceFilters />
-        <SequencesList sequences={this.props.sequences} reduced={true}></SequencesList>
+        <DraggableSequencesList sequences={this.props.sequences}></DraggableSequencesList>
+        {/*<SequencesList sequences={this.props.sequences} reduced={true}></SequencesList>*/}
       </div>
     )
   }
