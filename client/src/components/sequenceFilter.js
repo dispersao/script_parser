@@ -11,7 +11,7 @@ const SequenceFilter = (props) => {
   const filter = props.filter
   return (
     <div className="FilterContainer">
-      <h3 className="FilterTitle">{props.name}</h3>
+      <div className="FilterTitle">{props.name}</div>
         <SequenceFilterIds {...props} />
         { filter.ids && filter.ids.length > 0 &&
           <div className="btn-group">
