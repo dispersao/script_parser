@@ -16,7 +16,6 @@ class FullSequencesList extends Component{
       <div className="ScreenplayContainer">
         <SequenceFilters />
         <DraggableSequencesList sequences={this.props.sequences}></DraggableSequencesList>
-        {/*<SequencesList sequences={this.props.sequences} reduced={true}></SequencesList>*/}
       </div>
     )
   }

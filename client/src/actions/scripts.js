@@ -4,6 +4,7 @@ import {getScripts} from '../selectors'
 export const REQUEST_SCRIPTS = 'REQUEST_SCRIPTS'
 export const RECEIVE_SCRIPTS = 'RECEIVE_SCRIPTS'
 export const SET_CURRENT_SCRIPT = 'SET_CURRENT_SCRIPT'
+export const ADD_SEQUENCE_TO_SCRIPT = 'ADD_SEQUENCE_TO_SCRIPT'
 
 
 export const requestScripts = () => ({
@@ -23,6 +24,15 @@ export const setCurrentScript = (id) => {
     payload: id
   })
 }
+
+export const addSequenceToScriptAt = (script, sequence, index) => ({
+  type: ADD_SEQUENCE_TO_SCRIPT,
+  payload: {
+    index: index,
+    sequence: sequence,
+    script: script
+  }
+})
 
 const shouldFetchScripts = (state) => {
   if(state.sequenceData.getIn(['loading', 'scripts'])){

@@ -121,10 +121,26 @@
   margin: auto;
 }
 
+.Screenplay {
+  display: flex;
+  flex-direction: column;
+}
+
 .ScriptHeaderView {
   padding: 1rem 2rem;
 }
 
 .ScriptName {
   width: 100%;
+}
+
+.droparea {
+  width: 100%;
+  height: 5px;
+}
+
+.droparea.over {
+  height: 400px;
+  background-color: #efefef;
+  opacity: 0.5;
 }

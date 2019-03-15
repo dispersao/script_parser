@@ -1,14 +1,15 @@
 import React, {Component} from 'react'
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 import FullSequencesList from './fullSequencesList'
 import ScriptHeader from './scriptHeader'
-import SequencesList from './sequencesList'
+import ScriptEditSequenceList from './scriptEditSequenceList'
 import {connect} from 'react-redux'
 import {toJS} from '../utils/immutableToJS'
 import {fetchScriptsIfNeeded, fetchSequencesifNeeded, setCurrentScriptId} from '../actions'
 import {getCurrentScriptFormatted} from '../selectors'
 import {Link} from 'react-router-dom'
 import {Nav} from 'react-bootstrap'
-
 
 import '../app.css'
 
@@ -33,7 +34,7 @@ class ScriptView extends Component {
               </section>
               <section className="scriptContainer">
                 {this.props.script && this.props.script.sequences.length &&
-                  <SequencesList sequences={this.props.script.sequences} reduced={true} />
+                  <ScriptEditSequenceList sequences={this.props.script.sequences} />
                 }
               </section>
             </div>
@@ -56,7 +57,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   setScript: ()=>dispatch(setCurrentScriptId(ownProps.match.params.id))
 })
 
-export default connect(
+export default DragDropContext(HTML5Backend)(connect(
   mapStateToProps,
   mapDispatchToProps
-)(toJS(ScriptView))
+)(toJS(ScriptView)))

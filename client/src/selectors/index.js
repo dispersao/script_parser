@@ -125,4 +125,4 @@ const filterField =  (filter, field) => {
   return shouldInclude
 }
 
-export { getCharacters, getLocations, getParts, getFilteredSequences, getSequenceFilterByName, getEntryListByname, getScripts , getSequences, getCurrentScriptFormatted};
+export { getCharacters, getLocations, getParts, getFilteredSequences, getSequenceFilterByName, getEntryListByname, getScripts , getSequences, getCurrentScriptId, getCurrentScriptFormatted};

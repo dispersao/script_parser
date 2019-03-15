@@ -4,8 +4,9 @@ import Sequence from './sequence'
 
 const sequenceSource = {
   beginDrag(props) {
+    console.log(props)
     return {
-      seqId: props.id
+      seqId: props.sequence.id
     };
   }
 };
