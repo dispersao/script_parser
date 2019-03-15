@@ -35,12 +35,15 @@ const getFilteredSequences = createSelector(
   getLocations,
   getTypes,
   getSequenceFilters,
-  ( sequences, parts, characters, locations, types, filters) => {
+  getScripts,
+  getCurrentScriptId,
+  getScriptSequences,
+  ( sequences, parts, characters, locations, types, filters, scripts, currentScript, scriptSeqs) => {
     if (!sequences || sequences.size === 0) return null;
     let filtered = (
       sequences
+        .sort((a, b) => a.get('id') < b.get('id') ? -1 : (a.get('id') > b.get('id') ? 1 : 0))
         .filter((sequence) => {
-          // const sequence = sequences.get(seqId.toString())
 
           return filters.keySeq().toArray().every( filterName => {
             let field;
@@ -56,7 +59,9 @@ const getFilteredSequences = createSelector(
                 break
             }
             return field && filterField(filters.get(filterName), field)
-          })
+          }) && !scripts
+                .getIn([currentScript.toString(), 'scriptSequences'])
+                .some(ss => scriptSeqs.getIn([ss.toString(),'sequenceId']) === sequence.get('id'))
         })
         .map((sequence) => mountSequence(sequence, types, locations, parts, characters))
       )
@@ -85,8 +90,8 @@ const getCurrentScriptFormatted = createSelector(
         sequences: script.get('scriptSequences').map((scriptSeqId, index) => {
           const scriptSeq = scriptSequences.get(scriptSeqId.toString())
           let seq = sequences.get(scriptSeq.get('sequenceId').toString())
-          seq = mountSequence(seq, types, locations, parts, characters)
-          return seq.set('index', scriptSeq.get('index'))
+          return mountSequence(seq, types, locations, parts, characters)
+          // return seq.set('index', scriptSeq.get('index'))
         })
       })
     }
