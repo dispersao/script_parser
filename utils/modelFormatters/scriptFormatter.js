@@ -5,12 +5,15 @@ const getScript = (store, query)=>{
 
   let queries = {
     include: [
-        { model: store.db.ScriptSequence,  as:'scriptSequences', attributes: 
+        { model: store.db.ScriptSequence,  as:'scriptSequences', attributes:
           { exclude:
-            ['createdAt', 'updatedAt']
+            ['createdAt', 'updatedAt', 'index']
           }
         }
-    ]
+    ],
+    order: [
+        [ ['id', 'ASC'], { model: store.db.ScriptSequence,  as:'scriptSequences' }, 'index', 'ASC']
+      ]
   };
 
   return store.db.Script.findAll(queries);
