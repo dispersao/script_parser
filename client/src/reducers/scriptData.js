@@ -4,7 +4,8 @@ import {
   REQUEST_SCRIPTS,
   RECEIVE_SCRIPTS,
   SET_CURRENT_SCRIPT,
-  ADD_SEQUENCE_TO_SCRIPT
+  ADD_SEQUENCE_TO_SCRIPT,
+  REMOVE_SEQUENCE_FROM_SCRIPT
 } from '../actions'
 
 export const STATE_KEY = 'scriptData'
@@ -22,6 +23,8 @@ const reducer = (state = initialScriptState, action) => {
       return newState.mergeDeep(fromJS(action.payload.entities))
     case ADD_SEQUENCE_TO_SCRIPT:
       return includeNewSequenceToScript(state, action.payload)
+    case REMOVE_SEQUENCE_FROM_SCRIPT:
+      return removeSequenceFromScript(state, action.payload)
     default:
       return state
   }
@@ -42,6 +45,10 @@ let id = Math.round(Math.random()*100000)
   let seqList = newState.getIn(['scripts', script.toString(),'scriptSequences']).insert(index,id)
   newState = newState.setIn(['scripts', script.toString(),'scriptSequences'], seqList)
   return newState;
+}
+
+function removeSequenceFromScript(state, {index, script}) {
+  return state.removeIn(['scripts', script.toString(), 'scriptSequences', index])
 }
 
 export default reducer

@@ -20,7 +20,7 @@ function collect(connect, monitor) {
 
 function DraggableSequence({ connectDragSource, isDragging, sequence }) {
   return connectDragSource(
-    <div>
+    <div className="dragContainer">
       <Sequence key={sequence.id} {...sequence}></Sequence>
     </div>
   );

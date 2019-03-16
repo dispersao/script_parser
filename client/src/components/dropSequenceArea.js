@@ -34,13 +34,11 @@ class DropSequenceArea extends Component {
 
 const mapStateToProps= (state,props) => {
   return {
-    ...props,
     script: getCurrentScriptId(state)
   }
 }
 
 const mapDispatchToProps = (dispatch, props) => ({
-  ...props,
   includeSequence: (seq, script, index)=>{
     dispatch(addSequenceToScriptAt(script, seq, index))
   }

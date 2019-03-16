@@ -5,7 +5,7 @@ export const REQUEST_SCRIPTS = 'REQUEST_SCRIPTS'
 export const RECEIVE_SCRIPTS = 'RECEIVE_SCRIPTS'
 export const SET_CURRENT_SCRIPT = 'SET_CURRENT_SCRIPT'
 export const ADD_SEQUENCE_TO_SCRIPT = 'ADD_SEQUENCE_TO_SCRIPT'
-
+export const REMOVE_SEQUENCE_FROM_SCRIPT = 'REMOVE_SEQUENCE_FROM_SCRIPT'
 
 export const requestScripts = () => ({
   type: REQUEST_SCRIPTS
@@ -30,6 +30,14 @@ export const addSequenceToScriptAt = (script, sequence, index) => ({
   payload: {
     index: index,
     sequence: sequence,
+    script: script
+  }
+})
+
+export const removeSequenceFromScriptAt = (script, index) => ({
+  type: REMOVE_SEQUENCE_FROM_SCRIPT,
+  payload: {
+    index: index,
     script: script
   }
 })
