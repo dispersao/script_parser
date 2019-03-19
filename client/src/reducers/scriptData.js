@@ -5,7 +5,8 @@ import {
   RECEIVE_SCRIPTS,
   SET_CURRENT_SCRIPT,
   ADD_SEQUENCE_TO_SCRIPT,
-  REMOVE_SEQUENCE_FROM_SCRIPT
+  REMOVE_SEQUENCE_FROM_SCRIPT,
+  CHANGE_SCRIPT_DATA
 } from '../actions'
 
 export const STATE_KEY = 'scriptData'
@@ -25,6 +26,8 @@ const reducer = (state = initialScriptState, action) => {
       return includeNewSequenceToScript(state, action.payload)
     case REMOVE_SEQUENCE_FROM_SCRIPT:
       return removeSequenceFromScript(state, action.payload)
+    case CHANGE_SCRIPT_DATA:
+      return setScriptData(state, action.payload)
     default:
       return state
   }
@@ -49,6 +52,10 @@ let id = Math.round(Math.random()*100000)
 
 function removeSequenceFromScript(state, {index, script}) {
   return state.removeIn(['scripts', script.toString(), 'scriptSequences', index])
+}
+
+function setScriptData(state, {script, field, value}){
+  return state.setIn(['scripts', script.toString(), field], value)
 }
 
 export default reducer

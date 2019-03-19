@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import {connect} from 'react-redux'
 import {toJS} from '../utils/immutableToJS'
-import {InputGroup, FormControl, Button} from 'react-bootstrap'
-import {fetchScriptsIfNeeded, fetchSequencesifNeeded} from '../actions'
+import {InputGroup, FormControl} from 'react-bootstrap'
+import {changeScriptName} from '../actions'
 
 
 const ScriptName = ({name, id, saveName}) => {
@@ -17,21 +17,10 @@ const ScriptName = ({name, id, saveName}) => {
              aria-label="Script's name"
              aria-describedby="basic-addon2"
              defaultValue={name}
-            />
-            <InputGroup.Append>
-              <Button
-                variant="outline-secondary"
-                onClick={()=>{
-                  setEdit(false)
-                  saveName('lalala')
-                }}>
-              Save</Button>
-              <Button
-                variant="outline-secondary"
-                onClick={()=>setEdit(false)}>
-                  Cancel
-                </Button>
-            </InputGroup.Append>
+             onBlur={(ev)=>{
+               saveName(ev.currentTarget.value)
+               setEdit(false)
+             }}/>
             </InputGroup>
         }
         {!edit &&
@@ -41,17 +30,13 @@ const ScriptName = ({name, id, saveName}) => {
   )
 }
 
-const mapStateToProps = (state, ownProps) => ({
 
+const mapDispatchToProps = (dispatch, props) => ({
+  saveName:(value)=>dispatch(changeScriptName(props.id, value))
 })
-
-const mapDispatchToProps = (dispatch, ownProps) => ({
-
-})
-
 
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(toJS(ScriptName))

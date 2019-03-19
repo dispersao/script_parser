@@ -1,6 +1,5 @@
 import React from 'react'
-import {Jumbotron, Badge} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import {Jumbotron} from 'react-bootstrap'
 import ScriptName from './scriptName'
 import ScriptAuthor from './scriptAuthor'
 

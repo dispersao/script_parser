@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import {connect} from 'react-redux'
 import {toJS} from '../utils/immutableToJS'
-import {InputGroup, FormControl, Button} from 'react-bootstrap'
-import {fetchScriptsIfNeeded, fetchSequencesifNeeded} from '../actions'
+import {InputGroup, FormControl} from 'react-bootstrap'
+import {changeScriptAuthor} from '../actions'
 
 
-const ScriptAuthor = ({author, id, saveName}) => {
+const ScriptAuthor = ({author, id, saveAuthor}) => {
   const [edit, setEdit] = useState(false)
 
   return (
@@ -17,21 +17,11 @@ const ScriptAuthor = ({author, id, saveName}) => {
              aria-label="Script's author"
              aria-describedby="basic-addon2"
              defaultValue={author}
+             onBlur={(ev)=>{
+               saveAuthor(ev.currentTarget.value)
+               setEdit(false)
+             }}
             />
-            <InputGroup.Append>
-              <Button
-                variant="outline-secondary"
-                onClick={()=>{
-                  setEdit(false)
-                  saveName('lalala')
-                }}>
-              Save</Button>
-              <Button
-                variant="outline-secondary"
-                onClick={()=>setEdit(false)}>
-                  Cancel
-                </Button>
-            </InputGroup.Append>
             </InputGroup>
         }
         {!edit &&
@@ -41,17 +31,13 @@ const ScriptAuthor = ({author, id, saveName}) => {
   )
 }
 
-const mapStateToProps = (state, ownProps) => ({
-
-})
-
-const mapDispatchToProps = (dispatch, ownProps) => ({
-
+const mapDispatchToProps = (dispatch, props) => ({
+  saveAuthor:(value)=>dispatch(changeScriptAuthor(props.id, value))
 })
 
 
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(toJS(ScriptAuthor))
