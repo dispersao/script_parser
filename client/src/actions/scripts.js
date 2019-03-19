@@ -59,7 +59,7 @@ const shouldFetchScripts = (state) => {
   if(!getScripts(state)){
     return true
   }
-  return true
+  return false
 }
 
 const fetchScripts = () => dispatch => {

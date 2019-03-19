@@ -66,7 +66,7 @@ const shouldFetchSequences = (state) => {
   if(!getSequences(state)){
     return true
   }
-  return true
+  return false
 }
 
 export const fetchSequencesifNeeded = name => (dispatch, getState) =>{

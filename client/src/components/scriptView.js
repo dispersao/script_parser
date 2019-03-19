@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import FullSequencesList from './fullSequencesList'
 import ScriptHeader from './scriptHeader'
 import SequencesList from './sequencesList'
 import {connect} from 'react-redux'
@@ -28,9 +27,6 @@ class ScriptView extends Component {
           <div>
             <ScriptHeader {...this.props.script} />
             <div className="scriptEditorSequencesContainer">
-              {/*<section className="sequencePicker">
-                <FullSequencesList />
-              </section>*/}
               <section className="scriptContainer">
                 {this.props.script && this.props.script.sequences.length &&
                   <SequencesList sequences={this.props.script.sequences} reduced={false} />
@@ -43,23 +39,6 @@ class ScriptView extends Component {
     )
   }
 }
-
-// const makeMapStateToProps = () => {
-//   const getScriptFormatted = makeGetScriptFormatted()
-//
-//   const mapStateToProps = (state, props) => {
-//     let script
-//       if(props.match.params.id) {
-//         script = getScriptFormatted(state, {id: props.match.params.id})
-//       } else {
-//         script = {sequences:[], name:'',author:''}
-//       }
-//     return {
-//       script: script
-//     }
-//   }
-//   return mapStateToProps
-// }
 
 const mapStateToProps= (state,props) => {
   return {

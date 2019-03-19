@@ -10,7 +10,6 @@ import {ListGroup} from 'react-bootstrap'
 
 class ScriptListContainer extends Component{
   componentDidMount(){
-    console.log(this.context)
     this.props.fetchScripts()
   }
 
@@ -18,8 +17,8 @@ class ScriptListContainer extends Component{
     return (
       <ListGroup>
         { this.props.scripts && Object.keys(this.props.scripts).map((index) => (
-          <ListGroup.Item>
-          <Link key={index} to={`${index}/edit`}>
+          <ListGroup.Item key={index}>
+          <Link to={`${index}/edit`}>
             <ScriptCard key={index} {...this.props.scripts[index]} onClick={this.props.onClick} />
           </Link>
           </ListGroup.Item>

@@ -18,6 +18,7 @@ class ScriptView extends Component {
     this.props.fetchScripts()
     this.props.fetchSequences()
     this.props.setScript()
+    this.props.copyConsistentScript()
   }
   render(){
     return (
@@ -51,10 +52,11 @@ const mapStateToProps= (state,props) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch, props) => ({
   fetchScripts: ()=>dispatch(fetchScriptsIfNeeded()),
   fetchSequences: ()=>dispatch(fetchSequencesifNeeded()),
-  setScript: ()=>dispatch(setCurrentScriptId(ownProps.match.params.id))
+  setScript: ()=>dispatch(setCurrentScriptId(props.match.params.id)),
+  copyConsistentScript: ()=>console.log('dispatch action to store consistent script')
 })
 
 export default DragDropContext(HTML5Backend)(connect(
