@@ -31,15 +31,33 @@ const reducer = (state = initialScriptState, action) => {
     default:
       return state
   }
-}
+
 
 function includeNewSequenceToScript (state, {index, sequence, script}) {
-  const newSeqList = state.getIn(['scripts', script.toString(), 'sequences']).insert(index,sequence)
-  return state.setIn(['scripts', script.toString(), 'sequences'], newSeqList)
+  const newSeqList = state.get('sequences').insert(index,sequence)
+  return state.set('sequences', newSeqList)
+}
+
+function includeNewSequenceToScriptOld (state, {index, sequence, script}) {
+let id = Math.round(Math.random()*100000)
+  let newScriptSequence = fromJS({
+    [id]: {
+      id: id,
+      sequenceId: sequence,
+      scriptId: parseInt(script)
+    }
+  })
+
+  let scriptSequencesList = state.get('scriptSequences').merge(newScriptSequence)
+  let newState = state.set('scriptSequences', scriptSequencesList)
+  let seqList = newState.getIn(['scripts', script.toString(),'scriptSequences']).insert(index,id)
+  newState = newState.setIn(['scripts', script.toString(),'scriptSequences'], seqList)
+  return newState;
 }
 
 function removeSequenceFromScript(state, {index, script}) {
-  return state.removeIn(['scripts', script.toString(), 'sequences', index])
+  // return state.removeIn(['scripts', script.toString(), 'scriptSequences', index])
+  return state.removeIn(['scripts', script.toString(), 'scriptSequences', index])
 }
 
 function setScriptData(state, {script, field, value}){

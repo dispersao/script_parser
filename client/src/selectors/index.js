@@ -60,8 +60,8 @@ const getFilteredSequences = createSelector(
             }
             return field && filterField(filters.get(filterName), field)
           }) && !scripts
-                .getIn([currentScript.toString(), 'scriptSequences'])
-                .some(ss => scriptSeqs.getIn([ss.toString(),'sequenceId']) === sequence.get('id'))
+                .getIn([currentScript.toString(), 'sequences'])
+                .some(sid => sid === sequence.get('id'))
         })
         .map((sequence) => mountSequence(sequence, types, locations, parts, characters))
       )
@@ -87,9 +87,10 @@ const getCurrentScriptFormatted = createSelector(
         name: script.get('name'),
         id: script.get('id'),
         author: script.get('author'),
-        sequences: script.get('scriptSequences').map((scriptSeqId, index) => {
-          const scriptSeq = scriptSequences.get(scriptSeqId.toString())
-          let seq = sequences.get(scriptSeq.get('sequenceId').toString())
+        // sequences: script.get('scriptSequences').map((scriptSeqId, index) => {
+        sequences: script.get('sequences').map((seqId, index) => {
+          // const scriptSeq = scriptSequences.get(scriptSeqId.toString())
+          let seq = sequences.get(seqId.toString())
           return mountSequence(seq, types, locations, parts, characters)
           // return seq.set('index', scriptSeq.get('index'))
         })

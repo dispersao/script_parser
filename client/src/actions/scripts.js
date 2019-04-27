@@ -64,15 +64,15 @@ const shouldFetchScripts = (state) => {
 
 const fetchScripts = () => dispatch => {
   dispatch(requestScripts())
-  return fetch(`/api/scripts`, {
+  return fetch(`/scripts`, {
     headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   }})
   .then(res => res.json())
   .then(json => {
-    console.log(normalizeScriptData(json))
-    return dispatch(receiveScripts(normalizeScriptData(json)))
+    console.log(normalizeScriptData(json.data))
+    return dispatch(receiveScripts(normalizeScriptData(json.data)))
   })
 }
 

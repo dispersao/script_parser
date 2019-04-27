@@ -48,14 +48,14 @@ export const receiveSequences = (data) => {
 
 const fetchSequences = () => dispatch => {
   dispatch(requestSequences())
-  return fetch(`/api/sequences`, {
+  return fetch(`/sequences`, {
     headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   }})
   .then(res => res.json())
   .then(json => {
-    return dispatch(receiveSequences(normalizeSequencesData(json)))
+    return dispatch(receiveSequences(normalizeSequencesData(json.data)))
   })
 }
 

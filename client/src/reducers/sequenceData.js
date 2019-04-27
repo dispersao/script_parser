@@ -21,4 +21,5 @@ const reducer = (state = initialSequencesState, action) => {
   }
 }
 
+
 export default reducer
