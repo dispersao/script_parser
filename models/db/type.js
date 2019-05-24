@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Type = sequelize.define('type', {
+  const Type = sequelize.define('types', {
     name: DataTypes.STRING,
   },{
     timestamps: false

@@ -39,21 +39,18 @@
   flex-flow: row nowrap;
   align-items: flex-start;
   justify-content: space-between;
+  flex-direction: column;
 }
 
 .FilterContainer {
   /* padding-bottom: 15px; */
   flex: 1;
   padding: 5px;
-}
-
-.FilterWrapper{
-  
+  width: 100%;
 }
 
 .FilterTitle {
   margin-bottom: 5px;
-  font-size: 18px;
   text-transform: uppercase;
 }
 
@@ -64,10 +61,11 @@
 .SequenceTitle {
   display: inline-block;
   margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .SequenceContainer {
-  padding: 30px;
+  padding: 0 30px;
 }
 
 .partContainer {
@@ -90,15 +88,74 @@
   margin-bottom: 10px;
 }
 
-.SequenceContainer.reduced {
+.reduced .SequenceContainer {
   background: #efefef;
   padding: 20px;
-  max-height: 350px;
-  max-width: 320px;
-  width: 320px;
   display: block;
-  height: 350px;
+  height: 400px;
   overflow: auto;
-  margin: 5px;
   float: left;
+}
+
+.sequencePicker .reduced .SequenceContainer {
+  max-height: 300px;
+}
+
+.scriptEditorSequencesContainer {
+  display: flex;
+}
+
+.sequencePicker {
+  flex: 1;
+  min-width: 200px;
+}
+
+.scriptContainer {
+  flex: 2;
+  min-width: 400px;
+  padding: 5px;
+  margin-top: -10px;
+}
+
+.scriptView {
+  max-width: 800px;
+  margin: auto;
+}
+
+.Screenplay {
+  display: flex;
+  flex-direction: column;
+}
+
+.ScriptHeaderView {
+  padding: 1rem 2rem;
+}
+
+.ScriptName {
+  width: 100%;
+}
+
+.droparea {
+  width: 100%;
+  height: 5px;
+}
+
+.droparea.over {
+  height: 400px;
+  background-color: #efefef;
+  opacity: 0.5;
+}
+
+.deleteSequence {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.dragContainer {
+  margin: 5px 0 0 0;
+}
+
+.sequenceWrapper {
+  position: relative;
 }

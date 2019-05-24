@@ -1,30 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Part extends Component {
-
-  render()  {
-    let partHeader = "";
-    if(this.props.type === 'dialogue'){
-      partHeader += this.props.characters[0].name;
-      if(this.props.extra){
-        partHeader += ` ${this.props.extra}`;
-      }
-    }
-    let classes = "partContent";
-    if(this.props.type === 'observation'){
-      classes += " light";
-    }
-
-    return (
-      <div className="partContainer">
-        {partHeader && partHeader.length > 0 &&
-          <h4 className="partHeader">{partHeader}</h4>
-        }
-        <div className={classes}>{this.props.content}</div>
-
-      </div>
-    )
+const Part = ({type, name, characters, extra, content}) => {
+  let partHeader = '';
+  if(type === 'dialogue'){
+    partHeader += characters[0].name
   }
+  if(extra){
+    partHeader += ` ${extra}`
+  }
+
+  let classes = "partContent";
+  if(type === 'observation'){
+    classes += " light";
+  }
+
+  return (
+    <div className="partContainer">
+      {partHeader && partHeader.length > 0 &&
+        <div className="partHeader">{partHeader}</div>
+      }
+      <div className={classes}>{content}</div>
+    </div>
+  )
 }
 
-export default Part;
+export default Part

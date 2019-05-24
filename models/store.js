@@ -9,7 +9,21 @@
 
     connect(){
       if(!this.sequelize){
-        const dbConf = this.getDBConfig();
+        let connectionString = process.env.CLEARDB_DATABASE_URL;
+        this.sequelize = new Sequelize(connectionString, {
+          dialect: 'mysql',
+          logging: false,
+          operatorsAliases: false,
+          define: {
+            freezeTableName: true
+          },
+          pool: {
+            max: 5,
+            min: 0,
+            idle: 10000
+          }
+        });
+        /*const dbConf = this.getDBConfig();
           this.sequelize = new Sequelize(dbConf.database, dbConf.user, dbConf.password, {
           host: dbConf.server,
           dialect: 'mysql',
@@ -18,7 +32,7 @@
             min: 0,
             idle: 10000
           }
-        });
+        });*/
         return this.sequelize.authenticate();
       } else {
         return Promise.resolve(true);
@@ -39,13 +53,17 @@
         Location: this.sequelize.import('./db/location'),
         Sequence: this.sequelize.import('./db/sequence'),
         Type: this.sequelize.import('./db/type'),
+        ScriptSequence: this.sequelize.import('./db/scriptSequence'),
         Part: this.sequelize.import('./db/part'),
+        Script: this.sequelize.import('./db/script'),
         SequenceCharacter: this.sequelize.import('./db/sequenceCharacter'),
-        PartCharacter: this.sequelize.import('./db/partCharacter'),
+        PartCharacter: this.sequelize.import('./db/partCharacter')
       };
 
       Object.keys(this.db).forEach((modelName) => {
+        console.log(modelName);
         if ('associate' in this.db[modelName]) {
+          console.log('associating: '+modelName)
           this.db[modelName].associate(this.db);
         }
       });
