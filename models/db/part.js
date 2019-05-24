@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Part = sequelize.define('part', {
+  const Part = sequelize.define('parts', {
     content: DataTypes.TEXT,
     type: DataTypes.STRING,
     extra: DataTypes.STRING,

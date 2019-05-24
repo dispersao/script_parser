@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  PartCharacter = sequelize.define('part_character', {
+  PartCharacter = sequelize.define('part_characters', {
 },{
   timestamps: false
 });

@@ -10,6 +10,12 @@ fs.readFile(fountainFile, 'utf-8', (err, data) => {
   } else {
     const script = data;
     const film = fountain.parse(data, true, processTokens);
+    film.sequences.map(({type, location, number}) => ({type, location, number}))
+    .forEach((s,i) => {
+      console.log(i);
+      console.log(s);
+    });
+    // debugger;
     includeNonDialogueCharsToScenes(film);
     store(film);
   }
@@ -27,15 +33,20 @@ const processTokens = output => {
       switch(token.type){
 
         case 'scene_heading':
-          sequence = {characters:[], content:'', actions:[], parts: []};
+          sequence = {characters:[], content:'', actions:[], parts: [], categories:[]};
           const type_location = token.text.split('-');
           sequence.type = type_location[0].trim();
           sequence.location = type_location[1].trim();
+          sequence.sceneNumber = token.scene_number;
 
           addUniqueElement(types, sequence.type);
           addUniqueElement(locations, sequence.location);
 
           sequences.push(sequence);
+        break;
+
+        case 'note':
+          sequence.categories.push({text: token.text})
         break;
 
         case 'dialogue_begin':
@@ -85,6 +96,7 @@ const includeNonDialogueCharsToScenes = (film) => {
       film.characters.forEach(char => {
         const reg = new RegExp(`\\b${char}\\b(?!\\*)`, 'gmi');
         if(actionPart.content.match(reg)){
+          console.log(sequence.sceneNumber+ " "+ char + " " + actionPart.content)
           addUniqueElement(sequence.characters, char, true);
           addUniqueElement(actionPart.characters, char, true);
         }

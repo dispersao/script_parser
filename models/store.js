@@ -9,7 +9,21 @@
 
     connect(){
       if(!this.sequelize){
-        const dbConf = this.getDBConfig();
+        let connectionString = process.env.CLEARDB_DATABASE_URL;
+        this.sequelize = new Sequelize(connectionString, {
+          dialect: 'mysql',
+          logging: false,
+          operatorsAliases: false,
+          define: {
+            freezeTableName: true
+          },
+          pool: {
+            max: 5,
+            min: 0,
+            idle: 10000
+          }
+        });
+        /*const dbConf = this.getDBConfig();
           this.sequelize = new Sequelize(dbConf.database, dbConf.user, dbConf.password, {
           host: dbConf.server,
           dialect: 'mysql',
@@ -18,7 +32,7 @@
             min: 0,
             idle: 10000
           }
-        });
+        });*/
         return this.sequelize.authenticate();
       } else {
         return Promise.resolve(true);

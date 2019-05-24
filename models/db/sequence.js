@@ -1,8 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
-  const Sequence = sequelize.define('sequence', {
+  const Sequence = sequelize.define('sequences', {
     // isEnabled:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
     isPlaying:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     hasPlayed:  { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+    sceneNumber: { type: DataTypes.STRING, allowNull: false, defaultValue: 0}
   },{
     timestamps: false
   });

@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Script.associate = (models) => {
     Script.hasMany(models.ScriptSequence, {
-      as: 'scriptSequences'
+      // as: 'scriptSequences'
     });
 
   };

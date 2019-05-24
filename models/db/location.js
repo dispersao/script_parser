@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Location = sequelize.define('location', {
+  const Location = sequelize.define('locations', {
     name: DataTypes.STRING,
   },{
     timestamps: false

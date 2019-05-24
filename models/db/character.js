@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Character = sequelize.define('character', {
+  const Character = sequelize.define('characters', {
     name: DataTypes.STRING,
   },{
     timestamps: false

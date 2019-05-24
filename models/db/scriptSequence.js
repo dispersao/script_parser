@@ -8,9 +8,9 @@ module.exports = (sequelize, DataTypes) => {
 
     });
 
-    ScriptSequence.belongsTo(models.Script, {
-    
-    });
+    // ScriptSequence.belongsTo(models.Script, {
+    //
+    // });
 
   };
 
