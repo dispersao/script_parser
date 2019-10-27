@@ -1,0 +1,11 @@
+Truncate table categories;
+Truncate table categories_characters__characters_categories;
+Truncate table categories_posts__posts_categories;
+Truncate table categories_sequences__sequences_categories;
+Truncate table characters;
+Truncate table characters_parts__parts_characters;
+TRUNCATE TABLE characters_parts__parts_characters;
+TRUNCATE TABLE locations;
+TRUNCATE TABLE parts;
+TRUNCATE TABLE Types;
+TRUNCATE TABLE sequences;
